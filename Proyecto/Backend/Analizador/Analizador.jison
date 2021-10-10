@@ -88,3 +88,5 @@
 [0-9]+("."[0-9]+)?\b    return 'P_NUMERO';
 
 ([a-zA-Z_])[a-zA-Z0-9_]* return 'P_ID';
+
+// \"[^\"]*\"              { yytext = yytext.substr(1,yyleng-2); return 'Tok_string'; }
