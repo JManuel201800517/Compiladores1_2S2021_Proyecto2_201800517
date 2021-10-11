@@ -1,32 +1,69 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" >
 <head>
-  <meta charset="utf-8">
-  <title>VirtualMall</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap2.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/bootstrap/css/Highlight-Clean.css">
-    <link rel="stylesheet" href="assets/bootstrap/css/styles.min.css">
-    
+  <meta charset="UTF-8">
+  <title>Interprete Jison</title>
+  <link rel='stylesheet' href='https://semantic-ui.com/dist/semantic.min.css'>
+  <link rel="stylesheet" href="../CSS/index.css">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.css'>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="../Backend/viz.js"></script>
+  <script  src="../Backend/Analizador/Analizador.js"></script>
+  <script  src="../Backend/Errores/Cons_Error.js"></script>
+  <script  src="../Backend/Errores/Func_Error.js"></script>
+  <script src="../Backend/Arbol/Interprete.js"></script>
+  <script src="../Backend/Consulta/Pila.js"></script>
+  <script src="../Backend/Consulta/Constructor.js"></script>
+  <script src="../Backend/Arbol/Operacion.js"></script>
+  <script src="../Backend/Arbol/Solucion.js"></script>
+  <script src="../Backend/Consulta/Consulta.js"></script>
+  
 </head>
-<body class="bg-gradient-primary">
-  <app-root></app-root>
-<!-- JS, Popper.js, and jQuery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-<script src="assets/js/bs-init.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-<script src="assets/js/theme.js"></script>
+<body>
+  <script  src="../Backend/Analizador/Analizador.js"></script>
+  <h1>Interprete Jison</h1>
+<!-- partial:index.partial.html -->
+<div class="ui small form segment">
+  <div id="tabs">    
+    <div class="ui  menu tabsName">
+       <div class="ui label blue item">
+         <i class="file outline icon"></i> Paginas:
+      </div>
+      <a class="item tabx" id="tAdd">
+        <i class="add square icon"></i></a>
+    </div>
+  </div>    
+</div>
+<div class="ui dimmer modals page">
+  <div class="ui small modal">    
+    <div class="header">
+      Cerrando..
+    </div>
+    <div class="content">
+      <p>¿Esta seguro de cerrar esta página?</p>
+    </div>
+    <div class="actions">
+      <div class="ui positive right labeled icon button">
+        Si
+        <i class="checkmark icon"></i>
+      </div>
+      <div class="ui negative button right labeled icon button">
+        No
+        <i class="close icon"></i>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- partial -->
+<div style="overflow-x: scroll;" id="graphviz_svg_div"><h1>Reporte de AST</h1><hr></div>
+
+<script src="../Backend/viz.js"></script> 
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
+<script src='https://semantic-ui.com/dist/semantic.min.js'></script>
+<script  src="../Backend/index.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.js'></script>
+<script src='https://codemirror.net/mode/javascript/javascript.js'></script>
+
+
 </body>
 </html>
