@@ -38,6 +38,8 @@ function appendTab(tab, nombre, contenido) {
     '<nav class="navbar navbar-dark bg-dark">'
     +'<button class="btn btn-outline-success" onclick="final(veditor'+numberTabs+',consola'+numberTabs+')">Analizar</button>'+
     '<button class="btn btn-outline-success" type="button"  onclick="openFile(veditor'+numberTabs+')">Abrir Archivo</button>'+
+    '<button class="btn btn-outline-success" type="button"  onclick="saveFile(veditor'+numberTabs+')">Guardar Archivo</button>'+
+    '<button  class="btn btn-outline-success" type="button"  onclick="errTable()">Generar Tabla de Errores</button>'+
     '<button  class="btn btn-outline-success" type="button"  onclick="genTS()">Generar Tabla de Simbolos</button>'
     +'</nav>'+
     '<br>'+'<br><textarea id="consola'+numberTabs+'"></textarea>'+' </div>')
@@ -60,6 +62,16 @@ function appendTab(tab, nombre, contenido) {
 function genTS(){
   var text=TS.getInstance().getsimbolos();
   download(text,"Reporte.html","text/html");
+}
+
+function saveFile(){
+
+}
+
+function errTable(){
+  var text=Func_Error.ObtenerInstancia().ObtenerError();
+  download(text,"Error.html","text/html");
+
 }
 
 
