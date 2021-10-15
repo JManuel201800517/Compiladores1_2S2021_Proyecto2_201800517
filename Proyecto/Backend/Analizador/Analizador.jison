@@ -39,7 +39,7 @@
 "lenght"            return 'P_LENGHT'
 "truncate"          return 'P_TRUNCATE'
 "round"             return 'P_ROUND'
-"typeof"            return 'P_typeof'
+"typeof"            return 'P_TYPEOF'
 "tostring"          return 'P_TOSTRING'
 "tochararray"       return 'P_TOCHARARRAY'
 "start"             return 'P_START'
@@ -64,6 +64,8 @@
 ">="              return 'P_MAYORIGUAL'
 "||"              return 'P_OR'
 "&&"              return 'P_AND'
+"&"               return 'P_SAND'
+"|"               return 'P_SOR'
 "!"               return 'P_NOT'
 "("               return 'P_PAR1'
 ")"               return 'P_PAR2'
@@ -77,19 +79,61 @@
 ":"               return 'P_DOSPUNTOS'
 "?"               return 'P_PREGUNTA'
 "/*"              return 'P_COMENINICIO'
-"//"              return 'P_COMENTARIO'
+//  "//"              return 'P_COMENTARIO'
 "*/"              return 'P_COMENFINAL'
+
+
+// Secuencias de escape
+
+"\n"        return  'P_SALTOLINEA'
+"\\"        return  'P_BARRAINVERTIDA'
+[\"]        return  'P_COMILLADOBLE';
+[\']        return  'P_COMILLASIMPLE';
+"\t"        return  'P_TABULACION'
+
+
 
 
 // Expresiones Regulares
 
- [\"\“\']           return 'P_CADENAS'
+["]           return 'P_COMILLA';
+
+[']           return  'P_APOSTROFE';
 
 [0-9]+("."[0-9]+)?\b    return 'P_NUMERO';
 
+[0-9]+                   return 'P_ENTERO';
+
 ([a-zA-Z_])[a-zA-Z0-9_]* return 'P_ID';
 
-\"[^\"]*\"              { yytext = yytext.substr(1,yyleng-2); return 'Tok_string'; }
+
+
+// Para char
+
+[0-9]                   return 'P_ENT';
+
+([a-zA-Z_])              return  'P_ALFABETO';
+
+[P_ALFABETO|P_ENT|P_TABULACION|P_COMILLASIMPLE|P_COMILLADOBLE|P_BARRAINVERTIDA|P_SALTOLINEA|
+  P_COMENFINAL|P_COMENINICIO|P_PREGUNTA|P_DOSPUNTOS|P_PUNTOYCOMA|P_COMA|P_PUNTO|P_CORCHETE2|
+  P_CORCHETE1|P_LLAVE2|P_LLAVE1|P_PAR2|P_PAR1|P_NOT|P_SAND|P_OR|P_MAYOR|P_MENOR|P_IGUAL|P_MODULO|
+  P_POTENCIA|P_DIVISION|P_MULTIPLICACION|P_RESTA|P_SUMA]                                          return  'P_CARACTER';
+
+
+[P_ALFABETO|P_ENT|P_TABULACION|P_COMILLASIMPLE|P_COMILLADOBLE|P_BARRAINVERTIDA|P_SALTOLINEA|
+  P_COMENFINAL|P_COMENINICIO|P_PREGUNTA|P_DOSPUNTOS|P_PUNTOYCOMA|P_COMA|P_PUNTO|P_CORCHETE2|
+  P_CORCHETE1|P_LLAVE2|P_LLAVE1|P_PAR2|P_PAR1|P_NOT|P_SAND|P_OR|P_MAYOR|P_MENOR|P_IGUAL|P_MODULO|
+  P_POTENCIA|P_DIVISION|P_MULTIPLICACION|P_RESTA|P_SUMA|P_AND|P_OR|P_MAYORIGUAL|P_MENORIGUAL|P_DIFERENTE|
+  P_IGUALACION|P_FALSE|P_TRUE|P_WITH|P_START|P_TOCHARARRAY|P_TOSTRING|P_TYPEOF|P_ROUND|P_TRUNCATE|
+  P_LENGHT|P_TOUPPER|P_TOLOWER|P_WRITELINE|P_VOID|P_RETURN|P_CONTINUE|P_DO|P_FOR|P_WHILE|P_BREAK|
+  P_DEFAULT|P_CASE|P_SWITCH|P_ELSE|P_IF|P_SETVALUE|P_GETVALUE|P_APPEND|P_DYNAMICLIST|P_NEW|
+  P_STRING|P_CHAR|P_BOOLEAN|P_DOUBLE|P_INT]*                                                 return  'P_TODO';
+
+
+// \"[^\"]*\"              { yytext = yytext.substr(1,yyleng-2); return 'Tok_string'; }
+
+
+
 
 
 
@@ -155,79 +199,62 @@
 //Definicion de gramatica
 
 //$$    $1
-S: SENTENCIAS EOF {$$=new AST_Node("RAIZ","RAIZ",this.$first_line,@1.last_column);$$.addChilds($1);return $$} ;
+S: SENTENCIAS EOF ;
 
 
-SENTENCIAS: SENTENCIAS SENTENCIA {$1.addChilds($2);$$=$1;}
-
-            | SENTENCIA{$$= new AST_Node("SENTENCIAS","SENTENCIAS",this._$.first_line,@1.last_column);
-                      $$.addChilds($1);} ;
 
 
-SENTENCIA: DECLARACION_1 Tok_pyc{$$=$1}
-           |ASIGNACION Tok_pyc{$$=$1}
-           |BLOQUE{$$=$1}
-           |IF{$$=$1}
-           |WHILE{$$=$1}
-           |DO_WHILE Tok_pyc{$$=$1}
-           |PRINT{$$=$1};
+SENTENCIAS: SENTENCIAS SENTENCIA 
+            | SENTENCIA ;
 
 
-DECLARACION_1: ID_LIST  {$$= new AST_Node("DECLARACION","DECLARACION",this._$.first_line,@1.first_column); $$.addChilds($1)};
 
 
-ID_LIST: ID_LIST Tok_coma Tok_ID {$1.addChilds(new AST_Node("ID",$3,this._$.first_line,@3.first_column)); $$=$1;}
-        | Tok_ID {$$= new AST_Node("ID_LIST","ID_LIST"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column))};
+SENTENCIA: VARINT            
+           |VARDOUBLE        
+           |VARBOOLEAN       
+           |VARCHAR          
+           |VARSTRING        ;
 
 
-ASIGNACION: Tok_ID Tok_asigna1 EXP {$$=new AST_Node("ASIGNACION","ASIGNACION",this._$.first_line,@1.last_column); 
-                                            $$.addChilds(new AST_Node("id",$1,this._$.first_line,@1.last_column),$3);};   
 
-            
+VARINT:  P_INT   P_ID    VARIABLEINT ;
 
-BLOQUE: Tok_llav1 SENTENCIAS Tok_llav2{$$= new AST_Node("BLOQUE","BLOQUE",this._$.first_line,@1.last_column); $$.addChilds($2)}
-        |Tok_llav1 Tok_llav2{$$= new AST_Node("BLOQUE","BLOQUE",this._$.first_line,@1.last_column);};
-
-
-IF: Tok_if Tok_par1 EXP Tok_par2 BLOQUE    {$$= new AST_Node("IF","IF",this._$.first_line,@1.last_column);$$.addChilds($3,$5)}
-    |Tok_if Tok_par1 EXP Tok_par2 BLOQUE Tok_else BLOQUE {$$= new AST_Node("IF","IF",this._$.first_line,@1.last_column); var aux = new AST_Node("ELSE","ELSE",this._$.first_line,@6.last_column); aux.addChilds($7);$$.addChilds($3,$5,aux)};
-
-WHILE: Tok_while Tok_par1 EXP Tok_par2 BLOQUE{$$=new AST_Node("WHILE","WHILE",this._$.first_line,@1.last_column); $$.addChilds($3,$5)};
+VARIABLEINT:  P_COMA    P_ID   VARIABLEINT
+          | P_PUNTOYCOMA 
+          | P_IGUAL    P_ENTERO  P_PUNTOYCOMA;
 
 
-DO_WHILE: Tok_do BLOQUE Tok_while Tok_par1 EXP Tok_par2 {$$=new AST_Node("DO_WHILE","DO_WHILE",this._$.first_line,@1.last_column);$$.addChilds($2,$5)};
+
+VARDOUBLE:  P_DOUBLE   P_ID    VARIABLEDOUBLE ;
+
+VARIABLEDOUBLE:  P_COMA    P_ID   VARIABLEDOUBLE
+          | P_PUNTOYCOMA 
+          | P_IGUAL    P_NUMERO  P_PUNTOYCOMA;
 
 
-PRINT: Tok_print Tok_par1 EXP Tok_par2 Tok_pyc {$$= new AST_Node("PRINT","PRINT",this._$.first_line,@1.last_column); $$.addChilds($3);};
+
+VARBOOLEAN:  P_BOOLEAN   P_ID    VARIABLEBOOLEAN ;
+
+VARIABLEBOOLEAN:  P_COMA    P_ID   VARIABLEBOOLEAN
+          | P_PUNTOYCOMA 
+          | P_IGUAL    TRUEFALSE   P_PUNTOYCOMA;
+
+TRUEFALSE: P_TRUE
+          |P_FALSE   ;
 
 
-EXP: EXP   P_SUMA    EXP                   {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_RESTA   EXP                 {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_MULTIPLICACION   EXP                    {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_DIVISION   EXP                    {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_POTENCIA   EXP                    {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_MODULO   EXP                   {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_DIFERENTE   EXP              {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_IGUALACION   EXP                  {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_IGUALR   EXP                 {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_MAYOR   EXP                  {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_MENOR   EXP                  {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_MAYORIGUAL   EXP                 {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_MENORIGUAL   EXP                {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_AND   EXP                    {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_OR   EXP                     {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
-    |P_NOT   EXP                       {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds(new AST_Node("op",$1,this._$.first_line,@1.last_column),$2);}
-    |P_PAR1   EXP   P_PAR2              {$$=$2}
-    |Tok_string                         {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);
-                                         var text = $1.substr(0,$1.length);
-                                         text=text.replace(/\\n/g,"\n");
-                                         text=text.replace(/\\t/g,"\t");
-                                         text=text.replace(/\\r/g,"\r");
-                                         text=text.replace(/\\\\/g,"\\");
-                                         text=text.replace(/\\\"/g,"\"");
-                                        $$.addChilds(new AST_Node("string",text,this._$.first_line,@1.last_column));}
-    |P_NUMERO                         {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("numero",$1,this._$.first_line,@1.last_column));}
-    |P_TRUE                           {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("true",$1,this._$.first_line,@1.last_column));}
-    |P_FALSE                         {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("false",$1,this._$.first_line,@1.last_column));}
-    |P_ID                            {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("id",$1,this._$.first_line,@1.last_column));};
 
+VARSTRING:  P_STRING   P_ID    VARIABLESTRING ;
+
+VARIABLESTRING:  P_COMA    P_ID   VARIABLESTRING
+          | P_PUNTOYCOMA 
+          | P_IGUAL   P_COMILLA    P_TODO   P_COMILLA  P_PUNTOYCOMA;
+
+
+
+VARCHAR:  P_CHAR   P_ID    VARIABLECHAR ;
+
+VARIABLECHAR:  P_COMA    P_ID   VARIABLECHAR
+          | P_PUNTOYCOMA 
+          | P_IGUAL   P_APOSTROFE   P_CARACTER   P_APOSTROFE  P_PUNTOYCOMA;
