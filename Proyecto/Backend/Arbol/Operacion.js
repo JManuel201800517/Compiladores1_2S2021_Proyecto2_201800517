@@ -13,12 +13,12 @@ class Operacion {
                     if (raiz.childs[2].value == ("+" || "-")) {
                         Resultado1 = this.ejecutar(raiz.childs[0]);
                         Resultado2 = 1;
-                        var op1 = raiz.childs[1].value + raiz.childs[2].value;
-                        console.log(op1);
-                        switch (op1) {
+                        var op = raiz.childs[1].value + raiz.childs[2].value;
+                        console.log(op);
+                        switch (op) {
                             case "++":
                             case "--":
-                                return this.aritmetico(Resultado1, Resultado2, raiz.childs[1].fila, raiz.childs[1].columna, op1);
+                                return this.aritmetico(Resultado1, Resultado2, raiz.childs[1].fila, raiz.childs[1].columna, op);
 
                             default:
                                 break;
@@ -35,6 +35,8 @@ class Operacion {
                             case "-":
                             case "*":
                             case "/":
+                            case "^":
+                            case "%":
                                 return this.aritmetico(Resultado1, Resultado2, raiz.childs[1].fila, raiz.childs[1].columna, op);
                             case "==":
                             case "!=":
@@ -86,7 +88,15 @@ class Operacion {
                 break;
             case "id":
                 Resultado = new ResultadoOp();
-                let simbolo = TS.getInstance().obtener(raiz.value);
+                let simbolo = Consulta.ObtenerInstancia().obtener(raiz.value);
+                Resultado.tipo = simbolo.tipo;
+                Resultado.valor = simbolo.valor;
+                console.log(raiz);
+                return Resultado;
+
+            case "elemento":
+                Resultado = new ResultadoOp();
+                let simbolo = Consulta.ObtenerInstancia().obtener(raiz.value);
                 Resultado.tipo = simbolo.tipo;
                 Resultado.valor = simbolo.valor;
                 console.log(raiz);
@@ -124,6 +134,13 @@ class Operacion {
                 Resultado.tipo = "string";
                 Resultado.valor = raiz.value;
                 return Resultado;
+
+            case "char":
+                Resultado = new ResultadoOp();
+                Resultado.tipo = "char";
+                Resultado.valor = raiz.value;
+                return Resultado;
+
             default:
                 break;
         }
@@ -165,10 +182,13 @@ class Operacion {
         }
         switch (op) {
             case "+":
+            case "++":
                 switch (tipo1) {
                     case "integer":
                         switch (tipo2) {
                             case "integer":
+                            case "boolean":
+                            case "char":
                                 res.tipo = "integer";
                                 res.valor = R1.valor + R2.valor;
                                 return res;
@@ -181,7 +201,7 @@ class Operacion {
                                 res.valor = R1.valor + R2.valor;
                                 return res;
                             default:
-                                L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
                                 res.tipo = "error";
                                 res.valor = "error";
                                 return res;
@@ -190,6 +210,8 @@ class Operacion {
                         switch (tipo2) {
                             case "integer":
                             case "double":
+                            case "boolean":
+                            case "char":
                                 res.tipo = "double";
                                 res.valor = R1.valor + R2.valor;
                                 return res;
@@ -198,7 +220,7 @@ class Operacion {
                                 res.valor = R1.valor + R2.valor;
                                 return res;
                             default:
-                                L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
                                 res.tipo = "error";
                                 res.valor = "error";
                                 return res;
@@ -208,24 +230,103 @@ class Operacion {
                             case "integer":
                             case "double":
                             case "string":
+                            case "boolean":
+                            case "char":
                                 res.tipo = "string";
                                 res.valor = R1.valor + R2.valor;
                                 return res;
                             default:
-                                L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                res.tipo = "error";
+                                res.valor = "error";
+                                return res;
+                        }
+                    case "boolean":
+                        switch (tipo2) {
+                            case "integer":
+                                res.tipo = "integer";
+                                res.valor = R1.valor + R2.valor;
+                                return res;
+                            case "double":
+                                res.tipo = "double";
+                                res.valor = R1.valor + R2.valor;
+                                return res;
+                            case "string":
+                                res.tipo = "string";
+                                res.valor = R1.valor + R2.valor;
+                                return res;
+                            default:
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                res.tipo = "error";
+                                res.valor = "error";
+                                return res;
+                        }
+
+                    case "char":
+                        switch (tipo2) {
+                            case "integer":
+                                res.tipo = "integer";
+                                res.valor = R1.valor + R2.valor;
+                                return res;
+                            case "double":
+                                res.tipo = "double";
+                                res.valor = R1.valor + R2.valor;
+                                return res;
+                            case "string":
+                            case "char":
+                                res.tipo = "string";
+                                res.valor = R1.valor + R2.valor;
+                                return res;
+                            default:
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
                                 res.tipo = "error";
                                 res.valor = "error";
                                 return res;
                         }
                     default:
-                        L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                        Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
                         res.tipo = "error";
                         res.valor = "error";
                         return res;
                 }
             case "-":
+            case "--":
                 switch (tipo1) {
                     case "integer":
+                        switch (tipo2) {
+                            case "integer":
+                            case "boolean":
+                            case "char":
+                                res.tipo = "integer";
+                                res.valor = R1.valor - R2.valor;
+                                return res;
+                            case "double":
+                                res.tipo = "double";
+                                res.valor = R1.valor - R2.valor;
+                                return res;
+                            default:
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                res.tipo = "error";
+                                res.valor = "error";
+                                return res;
+                        }
+                    case "double":
+                        switch (tipo2) {
+                            case "integer":
+                            case "double":
+                            case "boolean":
+                            case "char":
+                                res.tipo = "double";
+                                res.valor = R1.valor - R2.valor;
+                                return res;
+                            default:
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                res.tipo = "error";
+                                res.valor = "error";
+                                return res;
+                        }
+                    case "boolean":
+                    case "char":
                         switch (tipo2) {
                             case "integer":
                                 res.tipo = "integer";
@@ -236,26 +337,14 @@ class Operacion {
                                 res.valor = R1.valor - R2.valor;
                                 return res;
                             default:
-                                L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
                                 res.tipo = "error";
                                 res.valor = "error";
                                 return res;
                         }
-                    case "double":
-                        switch (tipo2) {
-                            case "integer":
-                            case "double":
-                                res.tipo = "double";
-                                res.valor = R1.valor - R2.valor;
-                                return res;
-                            default:
-                                L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
-                                res.tipo = "error";
-                                res.valor = "error";
-                                return res;
-                        }
+
                     default:
-                        L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                        Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
                         res.tipo = "error";
                         res.valor = "error";
                         return res;
@@ -265,6 +354,7 @@ class Operacion {
                     case "integer":
                         switch (tipo2) {
                             case "integer":
+                            case "char":
                                 res.tipo = "integer";
                                 res.valor = R1.valor * R2.valor;
                                 return res;
@@ -273,7 +363,7 @@ class Operacion {
                                 res.valor = R1.valor * R2.valor;
                                 return res;
                             default:
-                                L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
                                 res.tipo = "error";
                                 res.valor = "error";
                                 return res;
@@ -282,17 +372,34 @@ class Operacion {
                         switch (tipo2) {
                             case "integer":
                             case "double":
+                            case "char":
                                 res.tipo = "double";
                                 res.valor = R1.valor * R2.valor;
                                 return res;
                             default:
-                                L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                res.tipo = "error";
+                                res.valor = "error";
+                                return res;
+                        }
+                    case "char":
+                        switch (tipo2) {
+                            case "integer":
+                                res.tipo = "integer";
+                                res.valor = R1.valor * R2.valor;
+                                return res;
+                            case "double":
+                                res.tipo = "double";
+                                res.valor = R1.valor * R2.valor;
+                                return res;
+                            default:
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
                                 res.tipo = "error";
                                 res.valor = "error";
                                 return res;
                         }
                     default:
-                        L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                        Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
                         res.tipo = "error";
                         res.valor = "error";
                         return res;
@@ -302,15 +409,65 @@ class Operacion {
                     case "integer":
                         switch (tipo2) {
                             case "integer":
-                                res.tipo = "integer";
+                            case "double":
+                            case "char":
+                                res.tipo = "double";
                                 res.valor = R1.valor / R2.valor;
                                 return res;
+                            default:
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                res.tipo = "error";
+                                res.valor = "error";
+                                return res;
+                        }
+                    case "double":
+                        switch (tipo2) {
+                            case "integer":
+                            case "double":
+                            case "char":
+                                res.tipo = "double";
+                                res.valor = R1.valor / R2.valor;
+                                return res;
+                            default:
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                res.tipo = "error";
+                                res.valor = "error";
+                                return res;
+                        }
+                    case "char":
+                        switch (tipo2) {
+                            case "integer":
                             case "double":
                                 res.tipo = "double";
                                 res.valor = R1.valor / R2.valor;
                                 return res;
                             default:
-                                L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                res.tipo = "error";
+                                res.valor = "error";
+                                return res;
+                        }
+
+                    default:
+                        Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                        res.tipo = "error";
+                        res.valor = "error";
+                        return res;
+                }
+            case "^":
+                switch (tipo1) {
+                    case "integer":
+                        switch (tipo2) {
+                            case "integer":
+                                res.tipo = "integer";
+                                res.valor = R1.valor ** R2.valor;
+                                return res;
+                            case "double":
+                                res.tipo = "double";
+                                res.valor = R1.valor ** R2.valor;
+                                return res;
+                            default:
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
                                 res.tipo = "error";
                                 res.valor = "error";
                                 return res;
@@ -320,20 +477,57 @@ class Operacion {
                             case "integer":
                             case "double":
                                 res.tipo = "double";
-                                res.valor = R1.valor / R2.valor;
+                                res.valor = R1.valor ** R2.valor;
                                 return res;
                             default:
-                                L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
                                 res.tipo = "error";
                                 res.valor = "error";
                                 return res;
                         }
+
                     default:
-                        L_Error.getInstance().insertar(new N_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                        Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
                         res.tipo = "error";
                         res.valor = "error";
                         return res;
                 }
+            case "%":
+                switch (tipo1) {
+                    case "integer":
+                        switch (tipo2) {
+                            case "integer":
+                            case "double":
+                                res.tipo = "double";
+                                res.valor = R1.valor % R2.valor;
+                                return res;
+                            default:
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                res.tipo = "error";
+                                res.valor = "error";
+                                return res;
+                        }
+                    case "double":
+                        switch (tipo2) {
+                            case "integer":
+                            case "double":
+                                res.tipo = "double";
+                                res.valor = R1.valor % R2.valor;
+                                return res;
+                            default:
+                                Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                                res.tipo = "error";
+                                res.valor = "error";
+                                return res;
+                        }
+
+                    default:
+                        Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + tipo2, fila, columna));
+                        res.tipo = "error";
+                        res.valor = "error";
+                        return res;
+                }
+
 
 
         }

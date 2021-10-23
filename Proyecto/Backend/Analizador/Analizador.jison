@@ -184,16 +184,16 @@ P_PREGUNTA|P_DOSPUNTOS|P_PUNTOYCOMA|P_COMA|P_PUNTO|P_CORCHETE2|
 %}
 
 // Precedencia
-%right 'P_IGUAL'
+
 %left  'P_OR'
 %left  'P_AND'
-%left  'P_IGUALACION' 'P_DIFERENTE' 'P_IGUALR'
-%nonassoc  'P_POTENCIA' 
-%left  'P_SUMA' 
-%right 'P_RESTA'
-%left  'P_MULTIPLICACION' 'P_DIVISION' 'P_MODULO'
-%left 'P_MENOR' 'P_MENORIGUAL' 'P_MAYOR' 'P_MAYORIGUAL'
 %right 'P_NOT' UMINUS
+%right 'P_IGUAL'
+%left 'P_MENOR' 'P_MENORIGUAL' 'P_MAYOR' 'P_MAYORIGUAL' 'P_IGUALACION' 'P_DIFERENTE' 'P_IGUALR'
+%left  'P_SUMA' 'P_RESTA'
+%left  'P_MULTIPLICACION' 'P_DIVISION' 'P_MODULO'
+%nonassoc  'P_POTENCIA' 
+%right 'P_RESTA'
 
 
 %start S
@@ -305,8 +305,8 @@ VECTORINT: P_INT   P_ID   P_CORCHETE1  P_CORCHETE2  P_IGUAL  VECINT;
 VECINT: P_NEW  P_INT  P_CORCHETE1   P_ENTERO   P_CORCHETE2   
         |P_LLAVE1   VALORESINT  P_LLAVE2   ;
 
-VALORESINT: VALORESINT   P_COMA   P_ENTERO
-           | P_ENTERO;
+VALORESINT: VALORESINT   P_COMA   EXP
+           | EXP;
 
 
 VECTORSTRING: P_STRING   P_ID   P_CORCHETE1  P_CORCHETE2  P_IGUAL  VECSTRING;
@@ -314,8 +314,8 @@ VECTORSTRING: P_STRING   P_ID   P_CORCHETE1  P_CORCHETE2  P_IGUAL  VECSTRING;
 VECSTRING: P_NEW  P_STRING  P_CORCHETE1   P_ENTERO   P_CORCHETE2   
         |P_LLAVE1   VALORESSTRING  P_LLAVE2   ;
 
-VALORESSTRING: VALORESSTRING   P_COMA    P_CADENA
-           |   P_CADENA  ;
+VALORESSTRING: VALORESSTRING   P_COMA    EXP
+           |   EXP  ;
 
 
 
@@ -324,8 +324,8 @@ VECTORCHAR: P_CHAR   P_ID   P_CORCHETE1  P_CORCHETE2  P_IGUAL  VECCHAR;
 VECCHAR: P_NEW  P_CHAR  P_CORCHETE1   P_ENTERO   P_CORCHETE2   
         |P_LLAVE1   VALORESCHAR  P_LLAVE2   ;
 
-VALORESCHAR: VALORESCHAR   P_COMA     P_CARACTER   
-           |   P_CARACTER   ;
+VALORESCHAR: VALORESCHAR   P_COMA     EXP   
+           |   EXP  ;
 
 
 VECTORBOOLEAN: P_BOOLEAN   P_ID   P_CORCHETE1  P_CORCHETE2  P_IGUAL  VECBOOLEAN;
@@ -333,8 +333,8 @@ VECTORBOOLEAN: P_BOOLEAN   P_ID   P_CORCHETE1  P_CORCHETE2  P_IGUAL  VECBOOLEAN;
 VECBOOLEAN: P_NEW  P_BOOLEAN  P_CORCHETE1   P_ENTERO   P_CORCHETE2   
         |P_LLAVE1   VALORESBOOLEAN  P_LLAVE2   ;
 
-VALORESBOOLEAN: VALORESBOOLEAN   P_COMA    TRUEFALSE
-           | TRUEFALSE;
+VALORESBOOLEAN: VALORESBOOLEAN   P_COMA    EXP
+           | EXP;
 
 
 VECTORDOUBLE: P_DOUBLE   P_ID   P_CORCHETE1  P_CORCHETE2  P_IGUAL  VECDOUBLE;
@@ -342,9 +342,8 @@ VECTORDOUBLE: P_DOUBLE   P_ID   P_CORCHETE1  P_CORCHETE2  P_IGUAL  VECDOUBLE;
 VECDOUBLE: P_NEW  P_DOUBLE  P_CORCHETE1   P_ENTERO   P_CORCHETE2   
         |P_LLAVE1   VALORESDOUBLE  P_LLAVE2   ;
 
-VALORESDOUBLE: VALORESDOUBLE   P_COMA   P_NUMERO
-           | P_NUMERO;
-
+VALORESDOUBLE: VALORESDOUBLE   P_COMA   EXP
+           | EXP;
 
 
 
@@ -353,13 +352,10 @@ VARINT:  P_INT   P_ID    VARIABLEINT ;
 
 VARIABLEINT:  P_COMA    P_ID   VARIABLEINT
           | P_ID 
-          | P_IGUAL    P_ENTERO  
+          | P_IGUAL    EXP  
           | P_IGUAL  P_PAR1  P_INT  P_PAR2  EXP 
-          | P_IGUAL  P_ID  P_CORCHETE1   P_ENTERO  P_CORCHETE2
-          | P_IGUAL  GETVAL  
-          | P_IGUAL  LLAMADA
           | P_IGUAL  P_LENGHT  P_PAR1  EXP  P_PAR2  
-          | P_IGUAL  P_TRUNCATE  P_PAR1  DECI  P_PAR2   ;
+          | P_IGUAL  P_TRUNCATE  P_PAR1  EXP  P_PAR2   ;
 
 DECI: P_NUMERO
       |P_ID  ;
@@ -370,12 +366,9 @@ VARDOUBLE:  P_DOUBLE   P_ID    VARIABLEDOUBLE ;
 
 VARIABLEDOUBLE:  P_COMA    P_ID   VARIABLEDOUBLE
           | P_ID
-          | P_IGUAL    P_NUMERO  
+          | P_IGUAL    EXP 
           | P_IGUAL  P_PAR1  P_DOUBLE  P_PAR2  EXP
-          | P_IGUAL  P_ID  P_CORCHETE1   P_ENTERO  P_CORCHETE2
-          | P_IGUAL  GETVAL 
-          | P_IGUAL  LLAMADA
-          | P_IGUAL  P_ROUND  P_PAR1   DECI   P_PAR2;
+          | P_IGUAL  P_ROUND  P_PAR1   EXP   P_PAR2;
 
 
 
@@ -383,10 +376,7 @@ VARBOOLEAN:  P_BOOLEAN   P_ID    VARIABLEBOOLEAN ;
 
 VARIABLEBOOLEAN:  P_COMA    P_ID   VARIABLEBOOLEAN
           | P_ID 
-          | P_IGUAL    TRUEFALSE  
-          | P_IGUAL  P_ID  P_CORCHETE1   P_ENTERO  P_CORCHETE2
-          | P_IGUAL  GETVAL 
-          | P_IGUAL  LLAMADA;
+          | P_IGUAL    EXP  ;
 
 TRUEFALSE: P_TRUE
           |P_FALSE   ;
@@ -397,16 +387,13 @@ VARSTRING:  P_STRING   P_ID    VARIABLESTRING ;
 
 VARIABLESTRING:  P_COMA    P_ID   VARIABLESTRING
           | P_ID 
-          | P_IGUAL   P_CADENA  
-          | P_IGUAL  P_ID  P_CORCHETE1   P_ENTERO  P_CORCHETE2
-          | P_IGUAL  GETVAL 
-          | P_IGUAL  LLAMADA
+          | P_IGUAL   EXP  
           | P_IGUAL  MAYMEN;
 
 MAYMEN: P_TOLOWER  P_PAR1  EXP  P_PAR2
         |P_TOUPPER  P_PAR1   EXP  P_PAR2  
         |P_TYPEOF  P_PAR1   EXP   P_PAR2
-        |P_TOSTRING  P_PAR1   TEXT  P_PAR2;
+        |P_TOSTRING  P_PAR1   EXP  P_PAR2;
 
 TEXT: P_NUMERO
       |TRUEFALSE   ;
@@ -417,11 +404,8 @@ VARCHAR:  P_CHAR   P_ID    VARIABLECHAR ;
 
 VARIABLECHAR:  P_COMA    P_ID   VARIABLECHAR
           | P_ID
-          | P_IGUAL   P_CARACTER  
-          | P_IGUAL  P_PAR1  P_CHAR  P_PAR2  EXP
-          | P_IGUAL  P_ID  P_CORCHETE1   P_ENTERO  P_CORCHETE2
-          | P_IGUAL  GETVAL 
-          | P_IGUAL  LLAMADA;
+          | P_IGUAL   EXP 
+          | P_IGUAL  P_PAR1  P_CHAR  P_PAR2  EXP;
 
 
 
@@ -486,12 +470,12 @@ WHILE: P_WHILE   P_PAR1  EXP   P_PAR2   BLOQUE  ;
 FOR: P_FOR   P_PAR1   ASIG_DEC    P_PUNTOYCOMA     EXP    P_PUNTOYCOMA   EXP    P_PAR2   BLOQUE;
 
 
-ASIG_DEC:  P_INT   P_ID   P_IGUAL   P_NUMERO   
-           |P_ID   P_IGUAL   P_NUMERO    ;
+ASIG_DEC:  P_INT   P_ID   P_IGUAL   EXP   
+           |P_ID   P_IGUAL   EXP    ;
 
 
-INCRE_DECRE:  P_ID   P_SUMA  P_SUMA
-              |P_ID  P_RESTA  P_RESTA ;
+INCRE_DECRE:  P_ID   P_SUMA  P_SUMA   {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
+              |P_ID  P_RESTA  P_RESTA   {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);};
 
 
 DO_WHILE: P_DO   BLOQUE    P_WHILE   P_PAR1    EXP    P_PAR2  ;
@@ -557,9 +541,9 @@ EXP: EXP P_SUMA EXP                    {$$= new AST_Node("EXP","EXP",this._$.fir
     |P_TRUE                          {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("true",$1,this._$.first_line,@1.last_column));}
     |P_FALSE                        {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("false",$1,this._$.first_line,@1.last_column));}
     |P_ID                            {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("id",$1,this._$.first_line,@1.last_column));}
-    |P_RESTA  EXP                   {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds(new AST_Node("op1",$1,this._$.first_line,@1.last_column),$2);}
-    |EXP  P_SUMA  P_SUMA            {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op1",$2,this._$.first_line,@2.last_column),$3);}
-    |EXP   P_RESTA  P_RESTA          {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op1",$2,this._$.first_line,@2.last_column),$3);}
+    |P_RESTA  EXP                   {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds(new AST_Node("op",$1,this._$.first_line,@1.last_column),$2);}
+    |EXP  P_SUMA  P_SUMA            {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
+    |EXP   P_RESTA  P_RESTA          {$$= new AST_Node("EXP","EXP",this._$.first_line,@2.last_column);$$.addChilds($1,new AST_Node("op",$2,this._$.first_line,@2.last_column),$3);}
     |P_CARACTER                      {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);
                                          var text = $1.substr(0,$1.length);
                                          text=text.replace(/\\n/g,"\n");
