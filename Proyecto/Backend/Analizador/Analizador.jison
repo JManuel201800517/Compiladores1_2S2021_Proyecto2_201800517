@@ -85,11 +85,11 @@
 
 // Secuencias de escape
 
-"\n"        return  'P_SALTOLINEA'
-"\\"        return  'P_BARRAINVERTIDA'
-[\"]        return  'P_COMILLADOBLE';
-[\']        return  'P_COMILLASIMPLE';
-"\t"        return  'P_TABULACION'
+// "\n"        return  'P_SALTOLINEA'
+// "\\"        return  'P_BARRAINVERTIDA'
+// [\"]        return  'P_COMILLADOBLE';
+// [\']        return  'P_COMILLASIMPLE';
+//"\t"        return  'P_TABULACION'
 
 
 
@@ -411,7 +411,12 @@ VARIABLECHAR:  P_COMA    P_ID   VARIABLECHAR
 
 DECLARACION:  P_ID   P_IGUAL   EXP 
               |P_ID   P_IGUAL  P_PAR1   TIPO  P_PAR2  EXP
-              |P_ID  P_COMA  DECLARACION  ; 
+              |P_ID  P_COMA  DECLARACION  
+              |P_ID   P_IGUAL  P_LENGHT  P_PAR1  EXP  P_PAR2  
+              |P_ID   P_IGUAL  P_TRUNCATE  P_PAR1  EXP  P_PAR2 
+              |P_ID   P_IGUAL  P_ROUND  P_PAR1   EXP   P_PAR2  
+              |P_ID MAYMEN;
+
 
 
  

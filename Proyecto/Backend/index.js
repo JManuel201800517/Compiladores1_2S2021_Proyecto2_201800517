@@ -60,11 +60,14 @@ function appendTab(tab, nombre, contenido) {
 
 
 function genTS(){
-  var text=TS.getInstance().getsimbolos();
+  var text=Consulta.ObtenerInstancia().ObtenerSimbolos();
   download(text,"Reporte.html","text/html");
 }
 
-function saveFile(){
+function saveFile(id){
+
+  var texto = id.getValue();
+  download(texto, 'Archivo Analizado.txt', 'text/plain')
 
 }
 
@@ -78,8 +81,8 @@ function errTable(){
 function final(id,consola){
     alert(id.getValue());
     consola.value='';
-    L_Error.getInstance().reiniciar();
-    TS.getInstance().reiniciar();
+    Func_Error.ObtenerInstancia().Reiniciar();
+    Consulta.ObtenerInstancia().Reiniciar();
     try{
       var resultado= gramatica.parse(id.getValue()); 
       
@@ -91,7 +94,7 @@ function final(id,consola){
       //consola.value=L_Error.getInstance().getErrores();
       return;
     }catch(error){
-        consola.value=error+"\n"+L_Error.getInstance().getErrores();
+        consola.value=error+"\n"+Func_Error.ObtenerInstancia().ObtenerError();
         console.log(error);
         download(error,'Archivo con errores','text/plain')
         return;
