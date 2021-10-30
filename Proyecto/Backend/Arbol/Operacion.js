@@ -273,6 +273,7 @@ class Operacion {
                                 res.entorno = "error"
                                 res.fila = fila
                                 res.columna = columna
+                                console.error("Semantico " + "No es posible operacion entre: " + tipo1 + ' % ' + tipo2 + " En la fila: " + fila +  " En la columna: " + columna)
                                 return res;
                         }
                     case "double":

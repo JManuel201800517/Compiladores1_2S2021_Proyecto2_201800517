@@ -41,7 +41,7 @@ var Consulta = (function () {
                 <th>Tipo</th>
                 <th>Valor</th>
                 <th>Entorno</th>
-                <th>Linea</th>
+                <th>Fila</th>
                 <th>Columna</th>
             </tr>`;
             var contador = 1;
@@ -52,7 +52,7 @@ var Consulta = (function () {
                 texto += "<td>" + sim.tipo + "</td>\n";
                 texto += "<td>" + sim.valor + "</td>\n";
                 texto += "<td>" + sim.entorno + "</td>\n";
-                texto += "<td>" + sim.linea + "</td>\n";
+                texto += "<td>" + sim.fila + "</td>\n";
                 texto += "<td>" + sim.columna + "</td>\n";
                 texto += "</tr>";
                 contador++;

@@ -72,7 +72,7 @@ function saveFile(id){
 }
 
 function errTable(){
-  var text=Func_Error.ObtenerInstancia().ObtenerError();
+  var text=Func_Error.ObtenerInstancia().ObtenerErrorTable();
   download(text,"Error.html","text/html");
 
 }
@@ -84,7 +84,7 @@ function final(id,consola){
     Func_Error.ObtenerInstancia().Reiniciar();
     Consulta.ObtenerInstancia().Reiniciar();
     try{
-      var resultado= gramatica.parse(id.getValue()); 
+      var resultado= Analizador.parse(id.getValue()); 
       
        console.log(imprimir(resultado));
        UpdateGraphviz(imprimir(resultado));

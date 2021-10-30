@@ -15,6 +15,7 @@ class Interprete{
     interpretar(raiz){
       let op;
       let res;
+      let gg;
       let simbolo;
       let codigo="";
       if(raiz===undefined || raiz===null)return;
@@ -28,25 +29,42 @@ class Interprete{
         case "SENTENCIAS":
           raiz.childs.forEach(hijo=> codigo+=this.interpretar(hijo) )
           return codigo;
-        case "DECLARACION":
+        case "VARINT1":
           raiz.childs[0].childs.forEach(hijo=> {
-            simbolo = new Simbolo(hijo.value,"","")
-            TS.getInstance().insertar(simbolo)
+            console.log(hijo.fila)
+            console.log(hijo.columna)
+            console.log(raiz.childs[0].childs[1].childs[0])
+            gg = raiz.childs[0].childs[1].childs[0]
+            simbolo = new Constructor(hijo.value,"integer",gg.value,"Variable",hijo.fila,hijo.columna)
+            console.log(hijo)
+            console.log(hijo.value)
+            Consulta.ObtenerInstancia().insertar(simbolo)
           })
         break;
-        case "ASIGNACION":
-          simbolo=TS.getInstance().obtener(raiz.childs[0].value)
+        case "VARINT":
+          raiz.childs[0].childs.forEach(hijo=> {
+            console.log(hijo.fila)
+            console.log(hijo.columna)
+            simbolo = new Constructor(hijo.value,"integer","","Variable",hijo.fila,hijo.columna)
+            console.log(hijo)
+            console.log(hijo.value)
+            Consulta.ObtenerInstancia().insertar(simbolo)
+          })
+        break;
+        case "ASIGNACIONINT":
+          simbolo=Consulta.ObtenerInstancia().obtener(raiz.childs[0].value)
           op = new Operador();
           res = op.ejecutar(raiz.childs[1])
           simbolo.tipo=res.tipo;
           simbolo.valor=res.valor;
-          TS.getInstance().modificar(simbolo)
+          Consulta.ObtenerInstancia().modificar(simbolo)
           console.log(res)
         break;
-        case "PRINT":
+        case "WRITELINE":
           op = new Operador();
           res = op.ejecutar(raiz.childs[0]);
           codigo+=res.valor+"\n"
+          console.log(codigo)
           return codigo;
   
         case "IF":

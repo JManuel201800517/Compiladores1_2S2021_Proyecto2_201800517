@@ -1,209 +1,3 @@
-// Parte lexica
-
-%lex
-
-%option case-insensitive
-
-%%
-
-\s+        // se ignoran los espacios en blanco
-"//".*      // Comentario linea actual
-
-// Palabras Reservadas
-
-"int"               return 'P_INT'
-"double"            return 'P_DOUBLE'
-"boolean"           return 'P_BOOLEAN'
-"char"              return 'P_CHAR'
-"string"            return 'P_STRING' 
-"new"               return 'P_NEW'  
-"dynamiclist"       return 'P_DYNAMICLIST' 
-"append"            return 'P_APPEND'
-"getvalue"          return 'P_GETVALUE'
-"setvalue"          return 'P_SETVALUE'
-"if"                return 'P_IF'
-"else"              return 'P_ELSE'
-"switch"            return 'P_SWITCH'
-"case"              return 'P_CASE'
-"default"           return 'P_DEFAULT'
-"break"             return 'P_BREAK'
-"while"             return 'P_WHILE'
-"for"               return 'P_FOR'
-"do"                return 'P_DO'
-"continue"          return 'P_CONTINUE'
-"return"            return 'P_RETURN'
-"void"              return 'P_VOID'
-"writeline"         return 'P_WRITELINE'
-"tolower"           return 'P_TOLOWER'
-"toupper"           return 'P_TOUPPER'
-"lenght"            return 'P_LENGHT'
-"truncate"          return 'P_TRUNCATE'
-"round"             return 'P_ROUND'
-"typeof"            return 'P_TYPEOF'
-"tostring"          return 'P_TOSTRING'
-"tochararray"       return 'P_TOCHARARRAY'
-"start"             return 'P_START'
-"with"              return 'P_WITH'
-"true"              return 'P_TRUE'
-"false"             return 'P_FALSE'
-
-//Simbolos
-
-"+"               return 'P_SUMA'
-"-"               return 'P_RESTA'
-"*"               return 'P_MULTIPLICACION'
-"/"               return 'P_DIVISION'
-"^"               return 'P_POTENCIA'
-"%"               return 'P_MODULO'
-"="               return 'P_IGUAL'
-"=="              return 'P_IGUALACION'
-"!="              return 'P_DIFERENTE'
-"<"               return 'P_MENOR'
-"<="              return 'P_MENORIGUAL'
-">"               return 'P_MAYOR'
-">="              return 'P_MAYORIGUAL'
-"||"              return 'P_OR'
-"&&"              return 'P_AND'
-"&"               return 'P_SAND'
-"|"               return 'P_SOR'
-"!"               return 'P_NOT'
-"("               return 'P_PAR1'
-")"               return 'P_PAR2'
-"{"               return 'P_LLAVE1'
-"}"               return 'P_LLAVE2'
-"["               return 'P_CORCHETE1'
-"]"               return 'P_CORCHETE2'
-"."               return 'P_PUNTO'
-","               return 'P_COMA'
-";"               return 'P_PUNTOYCOMA'
-":"               return 'P_DOSPUNTOS'
-"?"               return 'P_PREGUNTA'
-"/*"              return 'P_COMENINICIO'
-//  "//"              return 'P_COMENTARIO'
-"*/"              return 'P_COMENFINAL'
-
-
-// Secuencias de escape
-
-// "\n"        return  'P_SALTOLINEA'
-// "\\"        return  'P_BARRAINVERTIDA'
-// [\"]        return  'P_COMILLADOBLE';
-// [\']        return  'P_COMILLASIMPLE';
-//"\t"        return  'P_TABULACION'
-
-
-
-
-// Expresiones Regulares
-
-// ["]           return 'P_COMILLA';
-
-// [']           return  'P_APOSTROFE';
-
-[0-9]+("."[0-9]+)?\b    return 'P_NUMERO';
-
-[0-9]+                   return 'P_ENTERO';
-
-([a-zA-Z_])[a-zA-Z0-9_]* return 'P_ID';
-
-
-
-// Para char
-
-[0-9]                   return 'P_ENT';
-
-([a-zA-Z_])              return  'P_ALFABETO';
-
-/* 
-[P_ALFABETO|P_ENT|P_TABULACION|P_COMILLASIMPLE|P_COMILLADOBLE|P_BARRAINVERTIDA|P_SALTOLINEA|
-P_PREGUNTA|P_DOSPUNTOS|P_PUNTOYCOMA|P_COMA|P_PUNTO|P_CORCHETE2|
-  P_CORCHETE1|P_LLAVE2|P_LLAVE1|P_PAR2|P_PAR1|P_NOT|P_SAND|P_OR|P_MAYOR|P_MENOR|P_IGUAL|P_MODULO|
-  P_POTENCIA|P_DIVISION|P_MULTIPLICACION|P_RESTA|P_SUMA]                                          return  'P_CARACTERP';
-
-
-
-[P_ALFABETO|P_ENT|P_TABULACION|P_COMILLASIMPLE|P_COMILLADOBLE|P_BARRAINVERTIDA|P_SALTOLINEA|
-P_PREGUNTA|P_DOSPUNTOS|P_PUNTOYCOMA|P_COMA|P_PUNTO|P_CORCHETE2|
-  P_CORCHETE1|P_LLAVE2|P_LLAVE1|P_PAR2|P_PAR1|P_NOT|P_SAND|P_OR|P_MAYOR|P_MENOR|P_IGUAL|P_MODULO|
-  P_POTENCIA|P_DIVISION|P_MULTIPLICACION|P_RESTA|P_SUMA|P_AND|P_OR|P_MAYORIGUAL|P_MENORIGUAL|P_DIFERENTE|
-  P_IGUALACION|P_FALSE|P_TRUE|P_WITH|P_START|P_TOCHARARRAY|P_TOSTRING|P_TYPEOF|P_ROUND|P_TRUNCATE|
-  P_LENGHT|P_TOUPPER|P_TOLOWER|P_WRITELINE|P_VOID|P_RETURN|P_CONTINUE|P_DO|P_FOR|P_WHILE|P_BREAK|
-  P_DEFAULT|P_CASE|P_SWITCH|P_ELSE|P_IF|P_SETVALUE|P_GETVALUE|P_APPEND|P_DYNAMICLIST|P_NEW|
-  P_STRING|P_CHAR|P_BOOLEAN|P_DOUBLE|P_INT]*                                                 return  'P_TODO';
-
-  */
-
-
-\"[^\"]*\"              { yytext = yytext.substr(1,yyleng-2); return 'P_CADENA'; }
-
-\'[^\"]?\'              { yytext = yytext.substr(1,yyleng-2); return 'P_CARACTER'; }
-
-
-
-
-
-
-// Editar desde aqui
-
-<<EOF>>				return 'EOF';
-.					{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
-                                          Func_Error.ObtenerInstancia().insertar(new Cons_Error("Lexico","Caracter: \" "+yytext+"\" no es valido" ,yylloc.first_line,yylloc.first_column));
-                                          return null; }
-
-/lex
-
-//Definimos codigo 
-
-
-%{
-
-    function AST_Node(tag,value,fila,columna){
-        this.tag = tag;
-        this.value = value;
-        this.fila = fila;
-        this.columna = columna;
-
-        this.childs = [];
-
-        this.addChilds = addChilds;
-        this.getSon = getSon;
-
-        function addChilds(){
-            for (var i = 0; i < arguments.length; i++) {
-                this.childs.push(arguments[i]);
-                if (arguments[i]!== null){
-                    arguments[i].padre = this;
-                }
-            }
-        }  
-
-        function getSon(pos){
-            if(pos > this.hijos.length - 1) return null;
-            return this.hijos[pos];
-        }
-    };
-
-%}
-
-// Precedencia
-
-%left  'P_OR'
-%left  'P_AND'
-%right 'P_NOT' UMINUS
-%right 'P_IGUAL'
-%left 'P_MENOR' 'P_MENORIGUAL' 'P_MAYOR' 'P_MAYORIGUAL' 'P_IGUALACION' 'P_DIFERENTE' 'P_IGUALR'
-%left  'P_SUMA' 'P_RESTA'
-%left  'P_MULTIPLICACION' 'P_DIVISION' 'P_MODULO'
-%nonassoc  'P_POTENCIA' 
-%right 'P_RESTA'
-
-
-%start S
-
-%%
-
-//Definicion de gramatica
-
 //$$    $1
 S: SENTENCIAS EOF  {$$=new AST_Node("RAIZ","RAIZ",this.$first_line,@1.last_column);$$.addChilds($1);return $$} ;
 
@@ -218,7 +12,6 @@ SENTENCIAS: SENTENCIAS SENTENCIA  {$1.addChilds($2);$$=$1;}
 
 
 SENTENCIA: VARIABLES      P_PUNTOYCOMA        {$$=$1}
-           | P_INT    VARINT   P_PUNTOYCOMA   {$$=$2}
            |COMENTARIOS   {$$=$1}
            |VECTORES      P_PUNTOYCOMA        {$$=$1}
            |LISTAS        P_PUNTOYCOMA        {$$=$1}
@@ -246,23 +39,24 @@ SENTENCIA: VARIABLES      P_PUNTOYCOMA        {$$=$1}
 
 
 
-VARIABLES: VARDOUBLE  
-           |VARBOOLEAN    
-           |VARCHAR        
-           |VARSTRING    ;
+VARIABLES:  P_INT VARINT          
+           |VARDOUBLE  {$$= new AST_Node("VARDOUBLE","VARDOUBLE",this._$.first_line,@1.first_column); $$.addChilds($1)}
+           |VARBOOLEAN    {$$= new AST_Node("VARBOOLEAN","VARBOOLEAN",this._$.first_line,@1.first_column); $$.addChilds($1)}
+           |VARCHAR        {$$= new AST_Node("VARCHAR","VARCHAR",this._$.first_line,@1.first_column); $$.addChilds($1)}
+           |VARSTRING    {$$= new AST_Node("VARSTRING","VARSTRING",this._$.first_line,@1.first_column); $$.addChilds($1)}} ;
 
 
-VECTORES:  VECTORINT   
-           |VECTORSTRING   
-           |VECTORCHAR     
-           |VECTORBOOLEAN   
-           |VECTORDOUBLE     ;
+VECTORES:  VECTORINT   {$$= new AST_Node("VECTORINT","VECTORINT",this._$.first_line,@1.first_column); $$.addChilds($1)}
+           |VECTORSTRING   {$$= new AST_Node("VECTORSTRING","VECTORSTRING",this._$.first_line,@1.first_column); $$.addChilds($1)}
+           |VECTORCHAR     {$$= new AST_Node("VECTORCHAR","VECTORCHAR",this._$.first_line,@1.first_column); $$.addChilds($1)}
+           |VECTORBOOLEAN   {$$= new AST_Node("VECTORBOOLEAN","VECTORBOOLEAN",this._$.first_line,@1.first_column); $$.addChilds($1)}
+           |VECTORDOUBLE    {$$= new AST_Node("VECTORDOUBLE","VECTORDOUBLE",this._$.first_line,@1.first_column); $$.addChilds($1)}  ;
 
-LISTAS: LISTAINT  
-        |LISTASTRING   
-        |LISTACHAR   
-        |LISTABOOLEAN   
-        |LISTADOUBLE   ;
+LISTAS: LISTAINT  {$$= new AST_Node("LISTAINT","LISTAINT",this._$.first_line,@1.first_column); $$.addChilds($1)}
+        |LISTASTRING   {$$= new AST_Node("LISTASTRING","LISTASTRING",this._$.first_line,@1.first_column); $$.addChilds($1)}
+        |LISTACHAR   {$$= new AST_Node("LISTACHAR","LISTACHAR",this._$.first_line,@1.first_column); $$.addChilds($1)}
+        |LISTABOOLEAN   {$$= new AST_Node("LISTABOOLEAN","LISTABOOLEAN",this._$.first_line,@1.first_column); $$.addChilds($1)}
+        |LISTADOUBLE   {$$= new AST_Node("LISTADOUBLE","LISTADOUBLE",this._$.first_line,@1.first_column); $$.addChilds($1)} ;
 
 
 FUNCIONES:  P_INT   P_ID   PARAMETROS   BLOQUE  
@@ -299,7 +93,7 @@ PARALLAMADA:  PARALLAMADA  P_COMA  EXP
               |EXP    ;
 
 
-COMENTARIOS: P_COMENINICIO   EXP    P_COMENFINAL; 
+COMENTARIOS: P_COMENINICIO   P_TODO    P_COMENFINAL; 
 
 
 VECTORINT: P_INT   P_ID   P_CORCHETE1  P_CORCHETE2  P_IGUAL  VECINT;
@@ -350,15 +144,12 @@ VALORESDOUBLE: VALORESDOUBLE   P_COMA   EXP
 
 
 
-VARINT:   VARIABLEINT   {$$= new AST_Node("VARINT","VARINT",this._$.first_line,@1.first_column); $$.addChilds($1)}
-         |VARIABLEINT1  {$$= new AST_Node("VARINT1","VARINT1",this._$.first_line,@1.first_column); $$.addChilds($1)};
+VARINT:    VARIABLEINT    {$$= new AST_Node("VARINT","VARINT",this._$.first_line,@1.first_column); $$.addChilds($1)} ;
 
-VARIABLEINT: P_ID  P_COMA  VARIABLEINT     {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
-          | P_ID                           {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column))} ;
-
-VARIABLEINT1: P_ID  P_COMA  VARIABLEINT1     {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
-          | P_ID  P_IGUAL    EXP           {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$3);}
-          | P_ID  P_IGUAL  P_PAR1  P_INT  P_PAR2  EXP  {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$6);}
+VARIABLEINT: P_ID  P_COMA  VARIABLEINT   {$1.addChilds(new AST_Node("ID",$3,this._$.first_line,@3.first_column)); $$=$1;}
+          | P_ID                         {$$= new AST_Node("VARIABLEINT","VARIABLEINT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column))}
+          | P_ID  P_IGUAL    EXP  
+          | P_ID  P_IGUAL  P_PAR1  P_INT  P_PAR2  EXP 
           | P_ID  P_IGUAL  P_LENGHT  P_PAR1  EXP  P_PAR2  
           | P_ID  P_IGUAL  P_TRUNCATE  P_PAR1  EXP  P_PAR2   ;
 
@@ -367,33 +158,33 @@ DECI: P_NUMERO
 
 
 
-VARDOUBLE:  P_DOUBLE       VARIABLEDOUBLE ;
+VARDOUBLE:  P_DOUBLE   P_ID    VARIABLEDOUBLE ;
 
-VARIABLEDOUBLE:  P_ID  P_COMA    VARIABLEDOUBLE
+VARIABLEDOUBLE:  P_COMA    P_ID   VARIABLEDOUBLE
           | P_ID
-          | P_ID P_IGUAL    EXP 
-          | P_ID P_IGUAL  P_PAR1  P_DOUBLE  P_PAR2  EXP
-          | P_ID  P_IGUAL  P_ROUND  P_PAR1   EXP   P_PAR2;
+          | P_IGUAL    EXP 
+          | P_IGUAL  P_PAR1  P_DOUBLE  P_PAR2  EXP
+          | P_IGUAL  P_ROUND  P_PAR1   EXP   P_PAR2;
 
 
 
-VARBOOLEAN:  P_BOOLEAN    VARIABLEBOOLEAN ;
+VARBOOLEAN:  P_BOOLEAN   P_ID    VARIABLEBOOLEAN ;
 
-VARIABLEBOOLEAN:  P_ID  P_COMA    VARIABLEBOOLEAN
+VARIABLEBOOLEAN:  P_COMA    P_ID   VARIABLEBOOLEAN
           | P_ID 
-          | P_ID  P_IGUAL    EXP  ;
+          | P_IGUAL    EXP  ;
 
 TRUEFALSE: P_TRUE
           |P_FALSE   ;
 
 
 
-VARSTRING:  P_STRING     VARIABLESTRING ;
+VARSTRING:  P_STRING   P_ID    VARIABLESTRING ;
 
-VARIABLESTRING:  P_ID  P_COMA    VARIABLESTRING
+VARIABLESTRING:  P_COMA    P_ID   VARIABLESTRING
           | P_ID 
-          | P_ID  P_IGUAL   EXP  
-          | P_ID  P_IGUAL  MAYMEN;
+          | P_IGUAL   EXP  
+          | P_IGUAL  MAYMEN;
 
 MAYMEN: P_TOLOWER  P_PAR1  EXP  P_PAR2
         |P_TOUPPER  P_PAR1   EXP  P_PAR2  
@@ -405,12 +196,12 @@ TEXT: P_NUMERO
 
 
 
-VARCHAR:  P_CHAR     VARIABLECHAR ;
+VARCHAR:  P_CHAR   P_ID    VARIABLECHAR ;
 
-VARIABLECHAR:  P_ID   P_COMA     VARIABLECHAR
+VARIABLECHAR:  P_COMA    P_ID   VARIABLECHAR
           | P_ID
-          | P_ID   P_IGUAL   EXP 
-          | P_ID  P_IGUAL  P_PAR1  P_CHAR  P_PAR2  EXP;
+          | P_IGUAL   EXP 
+          | P_IGUAL  P_PAR1  P_CHAR  P_PAR2  EXP;
 
 
 
@@ -566,4 +357,3 @@ EXP: EXP P_SUMA EXP                    {$$= new AST_Node("EXP","EXP",this._$.fir
     |P_ID  P_CORCHETE1   P_ENTERO  P_CORCHETE2   {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("elemento",$1,this._$.first_line,@1.last_column));}
     |GETVAL 
     |LLAMADA;                
-           
