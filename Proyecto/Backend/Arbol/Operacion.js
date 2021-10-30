@@ -116,21 +116,22 @@ class Operacion {
 
             case "numero":
                 Resultado = new ResultadoOp();
-                if (raiz.value.includes(".")) {
-                    Resultado.tipo = "double";
-                    Resultado.valor = parseFloat(raiz.value);
-                    Resultado.entorno = "Es un numero Decimal";
-                    Resultado.fila = raiz.childs[0].fila
-                    Resultado.columna = raiz.childs[0].columna;
-                    return Resultado
-                } else {
-                    Resultado.tipo = "integer";
-                    Resultado.valor = parseInt(raiz.value);
-                    Resultado.entorno = "Es un numero Entero";
-                    Resultado.fila = raiz.childs[0].fila
-                    Resultado.columna = raiz.childs[0].columna;
-                    return Resultado
-                }
+                Resultado.tipo = "double";
+                Resultado.valor = parseFloat(raiz.value);
+                Resultado.entorno = "Es un numero Decimal";
+                Resultado.fila = raiz.childs[0].fila
+                Resultado.columna = raiz.childs[0].columna;
+                return Resultado
+
+
+            case "entero":
+                Resultado = new ResultadoOp();
+                Resultado.tipo = "integer";
+                Resultado.valor = parseInt(raiz.value);
+                Resultado.entorno = "Es un numero Entero";
+                Resultado.fila = raiz.childs[0].fila
+                Resultado.columna = raiz.childs[0].columna;
+                return Resultado
 
             case "true":
                 Resultado = new ResultadoOp();
@@ -273,7 +274,7 @@ class Operacion {
                                 res.entorno = "error"
                                 res.fila = fila
                                 res.columna = columna
-                                console.error("Semantico " + "No es posible operacion entre: " + tipo1 + ' % ' + tipo2 + " En la fila: " + fila +  " En la columna: " + columna)
+                                console.error("Semantico " + "No es posible operacion entre: " + tipo1 + ' % ' + tipo2 + " En la fila: " + fila + " En la columna: " + columna)
                                 return res;
                         }
                     case "double":

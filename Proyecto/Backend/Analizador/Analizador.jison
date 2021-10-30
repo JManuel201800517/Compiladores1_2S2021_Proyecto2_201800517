@@ -100,7 +100,7 @@
 
 // [']           return  'P_APOSTROFE';
 
-[0-9]+("."[0-9]+)?\b    return 'P_NUMERO';
+[0-9]+("."[0-9]+)\b    return 'P_NUMERO';
 
 [0-9]+                   return 'P_ENTERO';
 
@@ -217,8 +217,11 @@ SENTENCIAS: SENTENCIAS SENTENCIA  {$1.addChilds($2);$$=$1;}
 
 
 
-SENTENCIA: VARIABLES      P_PUNTOYCOMA        {$$=$1}
-           | P_INT    VARINT   P_PUNTOYCOMA   {$$=$2}
+SENTENCIA:  P_INT    VARINT   P_PUNTOYCOMA   {$$=$2}
+           | P_DOUBLE    VARDOUBLE   P_PUNTOYCOMA   {$$=$2}
+           | P_BOOLEAN    VARBOOLEAN   P_PUNTOYCOMA   {$$=$2}
+           | P_STRING    VARSTRING   P_PUNTOYCOMA   {$$=$2}
+           | P_CHAR    VARCHAR   P_PUNTOYCOMA   {$$=$2}
            |COMENTARIOS   {$$=$1}
            |VECTORES      P_PUNTOYCOMA        {$$=$1}
            |LISTAS        P_PUNTOYCOMA        {$$=$1}
@@ -243,13 +246,6 @@ SENTENCIA: VARIABLES      P_PUNTOYCOMA        {$$=$1}
            |SETVAL   P_PUNTOYCOMA          {$$=$1}
            |LLAMADA    P_PUNTOYCOMA       {$$=$1}   ;
 
-
-
-
-VARIABLES: VARDOUBLE  
-           |VARBOOLEAN    
-           |VARCHAR        
-           |VARSTRING    ;
 
 
 VECTORES:  VECTORINT   
@@ -350,67 +346,119 @@ VALORESDOUBLE: VALORESDOUBLE   P_COMA   EXP
 
 
 
-VARINT:   VARIABLEINT   {$$= new AST_Node("VARINT","VARINT",this._$.first_line,@1.first_column); $$.addChilds($1)}
-         |VARIABLEINT1  {$$= new AST_Node("VARINT1","VARINT1",this._$.first_line,@1.first_column); $$.addChilds($1)};
+VARINT:   VARIABLEINT   {$$= new AST_Node("DECLARACION INT","DECLARACION INT",this._$.first_line,@1.first_column); $$.addChilds($1)}
+         |VARIABLEINT1  {$$= new AST_Node("ASIGNACION INT","ASIGNACION INT",this._$.first_line,@1.first_column); $$.addChilds($1)}
+         |VARIABLEINT2  {$$= new AST_Node("LENGHT INT","LENGHT INT",this._$.first_line,@1.first_column); $$.addChilds($1)}
+         |VARIABLEINT3  {$$= new AST_Node("TRUNCATE INT","TRUNCATE INT",this._$.first_line,@1.first_column); $$.addChilds($1)}
+         |VARIABLEINT4  {$$= new AST_Node("CASTEO INT","CASTEO INT",this._$.first_line,@1.first_column); $$.addChilds($1)};
 
 VARIABLEINT: P_ID  P_COMA  VARIABLEINT     {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
           | P_ID                           {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column))} ;
 
 VARIABLEINT1: P_ID  P_COMA  VARIABLEINT1     {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
-          | P_ID  P_IGUAL    EXP           {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$3);}
-          | P_ID  P_IGUAL  P_PAR1  P_INT  P_PAR2  EXP  {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$6);}
-          | P_ID  P_IGUAL  P_LENGHT  P_PAR1  EXP  P_PAR2  
-          | P_ID  P_IGUAL  P_TRUNCATE  P_PAR1  EXP  P_PAR2   ;
+          | P_ID  P_IGUAL    EXP           {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$3);} ;
+
+VARIABLEINT2: P_ID  P_COMA  VARIABLEINT2     {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+           | P_ID  P_IGUAL  P_LENGHT  P_PAR1  EXP  P_PAR2  {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$5);};
+
+VARIABLEINT3: P_ID  P_COMA  VARIABLEINT3     {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+           | P_ID  P_IGUAL  P_TRUNCATE  P_PAR1  EXP  P_PAR2  {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$5);};
+
+VARIABLEINT4: P_ID  P_COMA  VARIABLEINT4     {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+           | P_ID  P_IGUAL  P_PAR1  P_INT  P_PAR2  EXP  {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$6);};
+
 
 DECI: P_NUMERO
       |P_ID  ;
 
 
 
-VARDOUBLE:  P_DOUBLE       VARIABLEDOUBLE ;
-
-VARIABLEDOUBLE:  P_ID  P_COMA    VARIABLEDOUBLE
-          | P_ID
-          | P_ID P_IGUAL    EXP 
-          | P_ID P_IGUAL  P_PAR1  P_DOUBLE  P_PAR2  EXP
-          | P_ID  P_IGUAL  P_ROUND  P_PAR1   EXP   P_PAR2;
+VARDOUBLE: VARIABLEDOUBLE  {$$= new AST_Node("DECLARACION DOUBLE","DECLARACION DOUBLE",this._$.first_line,@1.first_column); $$.addChilds($1)}
+         | VARIABLEDOUBLE1  {$$= new AST_Node("ASIGNACION DOUBLE","ASIGNACION DOUBLE",this._$.first_line,@1.first_column); $$.addChilds($1)}
+         | VARIABLEDOUBLE2  {$$= new AST_Node("CASTEO DOUBLE","CASTEO DOUBLE",this._$.first_line,@1.first_column); $$.addChilds($1)}
+         | VARIABLEDOUBLE3  {$$= new AST_Node("ROUND DOUBLE","ROUND DOUBLE",this._$.first_line,@1.first_column); $$.addChilds($1)};
 
 
+VARIABLEDOUBLE:  P_ID  P_COMA    VARIABLEDOUBLE  {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+          | P_ID                                 {$$= new AST_Node("VARIABLE DOUBLE","VARIABLE DOUBLE"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column))} ;
 
-VARBOOLEAN:  P_BOOLEAN    VARIABLEBOOLEAN ;
 
-VARIABLEBOOLEAN:  P_ID  P_COMA    VARIABLEBOOLEAN
-          | P_ID 
-          | P_ID  P_IGUAL    EXP  ;
+VARIABLEDOUBLE1:  P_ID  P_COMA    VARIABLEDOUBLE1  {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+          | P_ID   P_IGUAL    EXP                  {$$= new AST_Node("VARIABLE DOUBLE","VARIABLE DOUBLE"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$3);};
+ 
+
+
+VARIABLEDOUBLE2:  P_ID  P_COMA    VARIABLEDOUBLE2            {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+          | P_ID P_IGUAL  P_PAR1  P_DOUBLE  P_PAR2  EXP    {$$= new AST_Node("VARIABLE DOUBLE","VARIABLE DOUBLE"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$6);} ;
+
+
+
+VARIABLEDOUBLE3:  P_ID  P_COMA    VARIABLEDOUBLE3            {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+          | P_ID  P_IGUAL  P_ROUND  P_PAR1   EXP   P_PAR2    {$$= new AST_Node("VARIABLE DOUBLE","VARIABLE DOUBLE"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$5);}  ;
+
+
+
+
+VARBOOLEAN:  VARIABLEBOOLEAN     {$$= new AST_Node("DECLARACION BOOLEAN","DECLARACION BOOLEAN",this._$.first_line,@1.first_column); $$.addChilds($1)}
+             | VARIABLEBOOLEAN1  {$$= new AST_Node("ASIGNACION BOOLEAN","ASIGNACION BOOLEAN",this._$.first_line,@1.first_column); $$.addChilds($1)};
+
+VARIABLEBOOLEAN:  P_ID  P_COMA    VARIABLEBOOLEAN    {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+                  | P_ID                             {$$= new AST_Node("VARIABLE BOOLEAN","VARIABLE BOOLEAN"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column))} ;
+
+VARIABLEBOOLEAN1:  P_ID  P_COMA    VARIABLEBOOLEAN1   {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+                 | P_ID  P_IGUAL    EXP               {$$= new AST_Node("VARIABLE BOOLEAN","VARIABLE BOOLEAN"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$3);};
 
 TRUEFALSE: P_TRUE
           |P_FALSE   ;
 
 
 
-VARSTRING:  P_STRING     VARIABLESTRING ;
 
-VARIABLESTRING:  P_ID  P_COMA    VARIABLESTRING
-          | P_ID 
-          | P_ID  P_IGUAL   EXP  
-          | P_ID  P_IGUAL  MAYMEN;
+VARSTRING:     VARIABLESTRING      {$$= new AST_Node("DECLARACION STRING","DECLARACION STRING",this._$.first_line,@1.first_column); $$.addChilds($1)}
+             | VARIABLESTRING1     {$$= new AST_Node("ASIGNACION STRING","ASIGNACION STRING",this._$.first_line,@1.first_column); $$.addChilds($1)}
+             | VARIABLESTRING2   {$$= new AST_Node("TOLOWER STRING","TOLOWER STRING",this._$.first_line,@1.first_column); $$.addChilds($1)}
+             | VARIABLESTRING3   {$$= new AST_Node("TOUPPER STRING","TOUPPER STRING",this._$.first_line,@1.first_column); $$.addChilds($1)}
+             | VARIABLESTRING4   {$$= new AST_Node("TYPEOF STRING","TYPEOF STRING",this._$.first_line,@1.first_column); $$.addChilds($1)}
+             | VARIABLESTRING5   {$$= new AST_Node("TOSTRING STRING","TOSTRING STRING",this._$.first_line,@1.first_column); $$.addChilds($1)};
 
-MAYMEN: P_TOLOWER  P_PAR1  EXP  P_PAR2
-        |P_TOUPPER  P_PAR1   EXP  P_PAR2  
-        |P_TYPEOF  P_PAR1   EXP   P_PAR2
-        |P_TOSTRING  P_PAR1   EXP  P_PAR2;
+VARIABLESTRING:  P_ID  P_COMA    VARIABLESTRING {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+                | P_ID                          {$$= new AST_Node("VARIABLE STRING","VARIABLE STRING"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column))} ;
+
+
+VARIABLESTRING1:  P_ID  P_COMA    VARIABLESTRING1  {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+          | P_ID  P_IGUAL   EXP  {$$= new AST_Node("VARIABLE STRING","VARIABLE STRING"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$3);};
+
+
+VARIABLESTRING2:  P_ID  P_COMA    VARIABLESTRING2  {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+          | P_ID  P_IGUAL  P_TOLOWER  P_PAR1  EXP  P_PAR2  {$$= new AST_Node("VARIABLE STRING","VARIABLE STRING"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$5);};
+
+VARIABLESTRING3:  P_ID  P_COMA    VARIABLESTRING3  {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+          | P_ID  P_IGUAL   P_TOUPPER  P_PAR1  EXP  P_PAR2   {$$= new AST_Node("VARIABLE STRING","VARIABLE STRING"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$5);};
+
+VARIABLESTRING4:  P_ID  P_COMA    VARIABLESTRING4  {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+          | P_ID  P_IGUAL   P_TYPEOF  P_PAR1  EXP  P_PAR2   {$$= new AST_Node("VARIABLE STRING","VARIABLE STRING"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$5);};
+
+VARIABLESTRING5:  P_ID  P_COMA    VARIABLESTRING5  {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+          | P_ID  P_IGUAL   P_TOSTRING  P_PAR1  EXP  P_PAR2   {$$= new AST_Node("VARIABLE STRING","VARIABLE STRING"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$5);};
+
 
 TEXT: P_NUMERO
       |TRUEFALSE   ;
 
 
 
-VARCHAR:  P_CHAR     VARIABLECHAR ;
+VARCHAR:   VARIABLECHAR      {$$= new AST_Node("DECLARACION CHAR","DECLARACION CHAR",this._$.first_line,@1.first_column); $$.addChilds($1)}
+         | VARIABLECHAR1     {$$= new AST_Node("ASIGNACION CHAR","ASIGNACION CHAR",this._$.first_line,@1.first_column); $$.addChilds($1)}
+         | VARIABLECHAR2    {$$= new AST_Node("CASTEO CHAR","CASTEO CHAR",this._$.first_line,@1.first_column); $$.addChilds($1)} ;
 
-VARIABLECHAR:  P_ID   P_COMA     VARIABLECHAR
-          | P_ID
-          | P_ID   P_IGUAL   EXP 
-          | P_ID  P_IGUAL  P_PAR1  P_CHAR  P_PAR2  EXP;
+VARIABLECHAR:  P_ID   P_COMA     VARIABLECHAR  {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+          | P_ID    {$$= new AST_Node("VARIABLE CHAR","VARIABLE CHAR"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column))} ;
+
+VARIABLECHAR1:  P_ID   P_COMA     VARIABLECHAR1  {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+          | P_ID   P_IGUAL   EXP                 {$$= new AST_Node("VARIABLE CHAR","VARIABLE CHAR"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$3);};
+
+VARIABLECHAR2:  P_ID   P_COMA     VARIABLECHAR2           {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
+          | P_ID  P_IGUAL  P_PAR1  P_CHAR  P_PAR2  EXP    {$$= new AST_Node("VARIABLE CHAR","VARIABLE CHAR"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$6);} ;
 
 
 
@@ -548,6 +596,7 @@ EXP: EXP P_SUMA EXP                    {$$= new AST_Node("EXP","EXP",this._$.fir
                                          text=text.replace(/\\\'/g,"\'");
                                         $$.addChilds(new AST_Node("string",text,this._$.first_line,@1.last_column));}
     |P_NUMERO                         {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("numero",$1,this._$.first_line,@1.last_column));}
+    |P_ENTERO                         {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("entero",$1,this._$.first_line,@1.last_column));}
     |P_TRUE                          {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("true",$1,this._$.first_line,@1.last_column));}
     |P_FALSE                        {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("false",$1,this._$.first_line,@1.last_column));}
     |P_ID                            {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("id",$1,this._$.first_line,@1.last_column));}
