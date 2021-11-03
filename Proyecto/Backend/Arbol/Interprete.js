@@ -18,6 +18,8 @@ class Interprete {
     let gg;
     let simbolo;
     let codigo = "";
+    let vec;
+    let lec;
     if (raiz === undefined || raiz === null) return;
 
 
@@ -29,17 +31,256 @@ class Interprete {
       case "SENTENCIAS":
         raiz.childs.forEach(hijo => codigo += this.interpretar(hijo))
         return codigo;
+      case "DECLARACION VECTOR INT":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        console.log(raiz.childs[0].childs)
+        console.log(raiz.childs[0].childs[1])
+        gg = raiz.childs[0].childs[1]
+        simbolo = new Constructor(vec.value, "vector", "", "Vector", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        for (let i = 0; i < gg; i++) {
+          simbolo = new Constructor(vec.value + "[" + i + "]", "integer", 0, "Vector", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(vec.value)
+          Consulta.ObtenerInstancia().insertar(simbolo)
+        }
+        break;
+      case "ASIGNACION VECTOR INT":
+        vec = raiz.childs[0].childs[0]
+        lec = raiz.childs[0].childs[1].childs.length
+        console.log(vec)
+        console.log(vec.fila)
+        console.log(vec.columna)
+        console.log(lec)
+        console.log(raiz.childs[0].childs[1].childs)
+        simbolo = new Constructor(vec.value, "vector", "", "Vector", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        for (let i = 0; i < lec; i++) {
+          gg = raiz.childs[0].childs[1].childs[i]
+
+          op = new Operacion();
+          res = op.ejecutar(gg)
+          if ( res.tipo == "integer") {
+            simbolo = new Constructor(vec.value + "[" + i + "]", "integer", res.valor, "Vector", vec.fila, vec.columna)
+            console.log(vec)
+            console.log(vec.value)
+            Consulta.ObtenerInstancia().insertar(simbolo)
+
+          } else {
+            simbolo = new Cons_Error("Sintactico", "No es un valor integer", vec.fila, vec.columna)
+            Func_Error.ObtenerInstancia().insertar(simbolo)
+
+
+          }
+        }
+        //console.log(raiz.childs[0].childs)
+
+        break;
+      case "DECLARACION VECTOR STRING":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        console.log(raiz.childs[0].childs)
+        console.log(raiz.childs[0].childs[1])
+        gg = raiz.childs[0].childs[1]
+        simbolo = new Constructor(vec.value, "vector", "", "Vector", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        for (let i = 0; i < gg; i++) {
+          simbolo = new Constructor(vec.value + "[" + i + "]", "string", "", "Vector", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(vec.value)
+          Consulta.ObtenerInstancia().insertar(simbolo)
+        }
+        break;
+      case "ASIGNACION VECTOR STRING":
+        vec = raiz.childs[0].childs[0]
+        lec = raiz.childs[0].childs[1].childs.length
+        console.log(vec)
+        console.log(vec.fila)
+        console.log(vec.columna)
+        console.log(lec)
+        console.log(raiz.childs[0].childs[1].childs)
+        simbolo = new Constructor(vec.value, "vector", "", "Vector", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        for (let i = 0; i < lec; i++) {
+          gg = raiz.childs[0].childs[1].childs[i]
+
+          op = new Operacion();
+          res = op.ejecutar(gg)
+          if (res.tipo == "string") {
+            simbolo = new Constructor(vec.value + "[" + i + "]", "string", res.valor, "Vector", vec.fila, vec.columna)
+            console.log(vec)
+            console.log(vec.value)
+            Consulta.ObtenerInstancia().insertar(simbolo)
+
+          } else {
+            simbolo = new Cons_Error("Sintactico", "No es un valor string", vec.fila, vec.columna)
+            Func_Error.ObtenerInstancia().insertar(simbolo)
+
+
+          }
+        }
+        //console.log(raiz.childs[0].childs)
+
+        break;
+      case "DECLARACION VECTOR BOOLEAN":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        console.log(raiz.childs[0].childs)
+        console.log(raiz.childs[0].childs[1])
+        gg = raiz.childs[0].childs[1]
+        simbolo = new Constructor(vec.value, "vector", "", "Vector", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        for (let i = 0; i < gg; i++) {
+          simbolo = new Constructor(vec.value + "[" + i + "]", "boolean", "", "Vector", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(vec.value)
+          Consulta.ObtenerInstancia().insertar(simbolo)
+        }
+        break;
+      case "ASIGNACION VECTOR BOOLEAN":
+        vec = raiz.childs[0].childs[0]
+        lec = raiz.childs[0].childs[1].childs.length
+        console.log(vec)
+        console.log(vec.fila)
+        console.log(vec.columna)
+        console.log(lec)
+        console.log(raiz.childs[0].childs[1].childs)
+        simbolo = new Constructor(vec.value, "vector", "", "Vector", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        for (let i = 0; i < lec; i++) {
+          gg = raiz.childs[0].childs[1].childs[i]
+
+          op = new Operacion();
+          res = op.ejecutar(gg)
+          if (res.tipo == "boolean") {
+            simbolo = new Constructor(vec.value + "[" + i + "]", "boolean", res.valor, "Vector", vec.fila, vec.columna)
+            console.log(vec)
+            console.log(vec.value)
+            Consulta.ObtenerInstancia().insertar(simbolo)
+
+
+          } else {
+            simbolo = new Cons_Error("Sintactico", "No es un valor boolean", vec.fila, vec.columna)
+            Func_Error.ObtenerInstancia().insertar(simbolo)
+
+
+          }
+        }
+        //console.log(raiz.childs[0].childs)
+
+        break;
+      case "DECLARACION VECTOR DOUBLE":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        console.log(raiz.childs[0].childs)
+        console.log(raiz.childs[0].childs[1])
+        gg = raiz.childs[0].childs[1]
+        simbolo = new Constructor(vec.value, "vector", "", "Vector", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        for (let i = 0; i < gg; i++) {
+          simbolo = new Constructor(vec.value + "[" + i + "]", "double", 0.0, "Vector", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(vec.value)
+          Consulta.ObtenerInstancia().insertar(simbolo)
+        }
+        break;
+      case "ASIGNACION VECTOR DOUBLE":
+        vec = raiz.childs[0].childs[0]
+        lec = raiz.childs[0].childs[1].childs.length
+        console.log(vec)
+        console.log(vec.fila)
+        console.log(vec.columna)
+        console.log(lec)
+        console.log(raiz.childs[0].childs[1].childs)
+        simbolo = new Constructor(vec.value, "vector", "", "Vector", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        for (let i = 0; i < lec; i++) {
+          gg = raiz.childs[0].childs[1].childs[i]
+
+          op = new Operacion();
+          res = op.ejecutar(gg)
+          if (res.tipo == "double") {
+            simbolo = new Constructor(vec.value + "[" + i + "]", "double", res.valor, "Vector", vec.fila, vec.columna)
+            console.log(vec)
+            console.log(vec.value)
+            Consulta.ObtenerInstancia().insertar(simbolo)
+
+          } else {
+            simbolo = new Cons_Error("Sintactico", "No es un valor double", vec.fila, vec.columna)
+            Func_Error.ObtenerInstancia().insertar(simbolo)
+
+
+          }
+        }
+        //console.log(raiz.childs[0].childs)
+
+        break;
+      case "DECLARACION VECTOR CHAR":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        console.log(raiz.childs[0].childs)
+        console.log(raiz.childs[0].childs[1])
+        gg = raiz.childs[0].childs[1]
+        simbolo = new Constructor(vec.value, "vector", "", "Vector", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        for (let i = 0; i < gg; i++) {
+          simbolo = new Constructor(vec.value + "[" + i + "]", "char", "", "Vector", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(vec.value)
+          Consulta.ObtenerInstancia().insertar(simbolo)
+        }
+        break;
+      case "ASIGNACION VECTOR CHAR":
+        vec = raiz.childs[0].childs[0]
+        lec = raiz.childs[0].childs[1].childs.length
+        console.log(vec)
+        console.log(vec.fila)
+        console.log(vec.columna)
+        console.log(lec)
+        console.log(raiz.childs[0].childs[1].childs)
+        simbolo = new Constructor(vec.value, "vector", "", "Vector", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        for (let i = 0; i < lec; i++) {
+          gg = raiz.childs[0].childs[1].childs[i]
+
+          op = new Operacion();
+          res = op.ejecutar(gg)
+          if (res.tipo == "char") {
+            simbolo = new Constructor(vec.value + "[" + i + "]", "char", res.valor, "Vector", vec.fila, vec.columna)
+            console.log(vec)
+            console.log(vec.value)
+            Consulta.ObtenerInstancia().insertar(simbolo)
+
+          } else {
+            simbolo = new Cons_Error("Sintactico", "No es un valor char", vec.fila, vec.columna)
+            Func_Error.ObtenerInstancia().insertar(simbolo)
+
+
+          }
+        }
+        //console.log(raiz.childs[0].childs)
+
+        break;
       case "ASIGNACION INT":
         raiz.childs[0].childs.forEach(hijo => {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
-          console.log(gg.tag)
-          if (gg.tag == "entero") {
-            simbolo = new Constructor(hijo.value, "integer", gg.value, "Variable", hijo.fila, hijo.columna)
-            console.log(hijo)
-            console.log(hijo.value)
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
+          console.log(res)
+          console.log(gg)
+          if (res.tipo == "integer") {
+            simbolo = new Constructor(hijo.value, res.tipo, res.valor, "Variable", hijo.fila, hijo.columna)
+            //console.log(hijo)
+            //console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
 
           } else {
@@ -54,18 +295,20 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          if (gg.tag == "entero") {
+          if (res.tipo == "integer") {
             console.log(Math.trunc(gg.value))
-            simbolo = new Constructor(hijo.value, "integer", Math.trunc(gg.value), "Variable", hijo.fila, hijo.columna)
+            simbolo = new Constructor(hijo.value, res.tipo, Math.trunc(res.valor), "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
 
-          } else if (gg.tag == "numero") {
+          } else if (res.tipo == "double") {
             console.log(Math.trunc(gg.value))
-            simbolo = new Constructor(hijo.value, "integer", Math.trunc(gg.value), "Variable", hijo.fila, hijo.columna)
+            simbolo = new Constructor(hijo.value, "integer", Math.trunc(res.valor), "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
@@ -82,18 +325,20 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          if (gg.tag == "char") {
+          if (res.tipo == "char") {
             console.log(gg.value.charCodeAt(0))
-            simbolo = new Constructor(hijo.value, "integer", gg.value.charCodeAt(0), "Variable", hijo.fila, hijo.columna)
+            simbolo = new Constructor(hijo.value, "integer", res.valor.charCodeAt(0), "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
 
-          } else if (gg.tag == "numero") {
+          } else if (res.tipo == "double") {
             console.log(Math.trunc(gg.value))
-            simbolo = new Constructor(hijo.value, "integer", Math.trunc(gg.value), "Variable", hijo.fila, hijo.columna)
+            simbolo = new Constructor(hijo.value, "integer", Math.trunc(res.valor), "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
@@ -110,18 +355,20 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          if (gg.tag == "char") {
-            console.log(gg.value.charCodeAt(0))
-            simbolo = new Constructor(hijo.value, "double", gg.value.charCodeAt(0).toFixed(2), "Variable", hijo.fila, hijo.columna)
+          if (res.tipo == "char") {
+            console.log(res.valor.charCodeAt(0))
+            simbolo = new Constructor(hijo.value, "double", res.valor.charCodeAt(0).toFixed(2), "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
 
-          } else if (gg.tag == "entero") {
+          } else if (res.tipo == "integer") {
             console.log(Math.trunc(gg.value))
-            simbolo = new Constructor(hijo.value, "double", gg.value.toFixed(2), "Variable", hijo.fila, hijo.columna)
+            simbolo = new Constructor(hijo.value, "double", res.valor.toFixed(2), "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
@@ -190,11 +437,13 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          if (gg.tag == "entero") {
-            console.log(gg.value.charCodeAt(0))
-            simbolo = new Constructor(hijo.value, "char", String.fromCharCode(gg.value), "Variable", hijo.fila, hijo.columna)
+          if (res.tipo == "integer") {
+            console.log(res.valor.charCodeAt(0))
+            simbolo = new Constructor(hijo.value, "char", String.fromCharCode(res.valor), "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
@@ -210,9 +459,11 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          simbolo = new Constructor(hijo.value, "integer", gg.value.length, "Variable", hijo.fila, hijo.columna)
+          simbolo = new Constructor(hijo.value, "integer", res.valor.length, "Variable", hijo.fila, hijo.columna)
           console.log(hijo)
           console.log(hijo.value)
           Consulta.ObtenerInstancia().insertar(simbolo)
@@ -224,10 +475,12 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          if (gg.tag == "numero") {
-            simbolo = new Constructor(hijo.value, "double", gg.value, "Variable", hijo.fila, hijo.columna)
+          if (res.tipo == "double") {
+            simbolo = new Constructor(hijo.value, "double", res.valor, "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
@@ -245,10 +498,12 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          if (gg.tag == "char") {
-            simbolo = new Constructor(hijo.value, "char", gg.value, "Variable", hijo.fila, hijo.columna)
+          if (res.tipo == "char") {
+            simbolo = new Constructor(hijo.value, "char", res.valor, "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
@@ -266,10 +521,12 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          if (gg.tag == "string") {
-            simbolo = new Constructor(hijo.value, "string", gg.value, "Variable", hijo.fila, hijo.columna)
+          if (res.tipo == "string") {
+            simbolo = new Constructor(hijo.value, "string", res.valor, "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
@@ -286,10 +543,12 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          if (gg.tag == "string") {
-            simbolo = new Constructor(hijo.value, "string", gg.value.toLowerCase(), "Variable", hijo.fila, hijo.columna)
+          if (res.tipo == "string") {
+            simbolo = new Constructor(hijo.value, "string", res.valor.toLowerCase(), "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
@@ -306,10 +565,12 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          if (gg.tag == "string") {
-            simbolo = new Constructor(hijo.value, "string", gg.value.toUpperCase(), "Variable", hijo.fila, hijo.columna)
+          if (res.tipo == "string") {
+            simbolo = new Constructor(hijo.value, "string", res.valor.toUpperCase(), "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
@@ -326,14 +587,16 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          if (gg.tag == "numero") {
+          /*if (res.tipo == "double") {
             simbolo = new Constructor(hijo.value, "string", "double", "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
-          } else if (gg.tag == "true") {
+          } else if (res.tipo == "boolean") {
             simbolo = new Constructor(hijo.value, "string", "boolean", "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
@@ -345,12 +608,12 @@ class Interprete {
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
 
-          } else {
-            simbolo = new Constructor(hijo.value, "string", gg.tag, "Variable", hijo.fila, hijo.columna)
-            console.log(hijo)
-            console.log(hijo.value)
-            Consulta.ObtenerInstancia().insertar(simbolo)
-          }
+          } else {*/
+          simbolo = new Constructor(hijo.value, "string", res.tipo, "Variable", hijo.fila, hijo.columna)
+          console.log(hijo)
+          console.log(hijo.value)
+          Consulta.ObtenerInstancia().insertar(simbolo)
+          //}
 
         })
         break;
@@ -359,9 +622,11 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          simbolo = new Constructor(hijo.value, "string", gg.value.toString(), "Variable", hijo.fila, hijo.columna)
+          simbolo = new Constructor(hijo.value, "string", res.valor.toString(), "Variable", hijo.fila, hijo.columna)
           console.log(hijo)
           console.log(hijo.value)
           Consulta.ObtenerInstancia().insertar(simbolo)
@@ -373,16 +638,12 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          if (gg.tag == "true") {
-            simbolo = new Constructor(hijo.value, "boolean", "true", "Variable", hijo.fila, hijo.columna)
-            console.log(hijo)
-            console.log(hijo.value)
-            Consulta.ObtenerInstancia().insertar(simbolo)
-
-          } else if (gg.tag == "false") {
-            simbolo = new Constructor(hijo.value, "boolean", "false", "Variable", hijo.fila, hijo.columna)
+          if (res.tipo == "boolean") {
+            simbolo = new Constructor(hijo.value, "boolean", res.valor, "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
@@ -399,18 +660,20 @@ class Interprete {
           console.log(hijo.fila)
           console.log(hijo.columna)
           console.log(raiz.childs[0].childs[1].childs[0])
-          gg = raiz.childs[0].childs[1].childs[0]
+          gg = raiz.childs[0].childs[1]
+          op = new Operacion();
+          res = op.ejecutar(gg)
           console.log(gg.tag)
-          if (gg.tag == "entero") {
-            console.log(Math.trunc(gg.value))
-            simbolo = new Constructor(hijo.value, "double", Math.round(gg.value).toFixed(2), "Variable", hijo.fila, hijo.columna)
+          if (res.tipo == "integer") {
+            console.log(Math.trunc(res.valor))
+            simbolo = new Constructor(hijo.value, "double", Math.round(res.valor).toFixed(2), "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
 
-          } else if (gg.tag == "numero") {
-            console.log(Math.trunc(gg.value))
-            simbolo = new Constructor(hijo.value, "double", Math.round(gg.value).toFixed(2), "Variable", hijo.fila, hijo.columna)
+          } else if (res.tipo == "double") {
+            console.log(Math.trunc(res.valor))
+            simbolo = new Constructor(hijo.value, "double", Math.round(res.valor).toFixed(2), "Variable", hijo.fila, hijo.columna)
             console.log(hijo)
             console.log(hijo.value)
             Consulta.ObtenerInstancia().insertar(simbolo)
@@ -433,7 +696,7 @@ class Interprete {
         console.log(res)
         break;
       case "WRITELINE":
-        op = new Operador();
+        op = new Operacion();
         res = op.ejecutar(raiz.childs[0]);
         codigo += res.valor + "\n"
         console.log(codigo)

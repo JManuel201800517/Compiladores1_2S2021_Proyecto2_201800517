@@ -7,25 +7,26 @@ class Operacion {
         var Resultado1 = null;
         var Resultado2 = null;
         var Resultado = null;
+        let simbolo;
         switch (raiz.tag) {
             case "EXP":
                 if (raiz.childs.length == 3) {
-                    if (raiz.childs[2].value == ("+" || "-")) {
+                    console.log(raiz.childs[1].value)
+                    /*if (raiz.childs[2].value == "+" || raiz.childs[2].value == "-") {
                         Resultado1 = this.ejecutar(raiz.childs[0]);
-                        Resultado2 = 1;
                         var op = raiz.childs[1].value + raiz.childs[2].value;
                         console.log(op);
                         switch (op) {
                             case "++":
                             case "--":
-                                return this.aritmetico(Resultado1, Resultado2, raiz.childs[1].fila, raiz.childs[1].columna, op);
+                                return this.aritmetico1(Resultado1, raiz.childs[1].fila, raiz.childs[1].columna, op);
 
                             default:
                                 break;
                         }
 
 
-                    } else {
+                    } else {*/
                         Resultado1 = this.ejecutar(raiz.childs[0]);
                         Resultado2 = this.ejecutar(raiz.childs[2]);
                         var op = raiz.childs[1].value;
@@ -49,10 +50,13 @@ class Operacion {
                             case "&&":
                             case "||":
                                 return this.logicos(Resultado1, Resultado2, raiz.childs[1].fila, raiz.childs[1].columna, op);
+                            case "++":
+                            case "--":
+                                return this.aritmetico1(Resultado1, raiz.childs[1].fila, raiz.childs[1].columna, op);
                             default:
                                 break;
                         }
-                    }
+                    //}
                 } else if (raiz.childs.length == 2) {
                     if (raiz.childs[0].value == "!") {
                         Resultado1 = this.ejecutar(raiz.childs[1])
@@ -61,8 +65,6 @@ class Operacion {
                             Resultado.tipo = "boolean"
                             Resultado.valor = !Resultado1.valor
                             Resultado.entorno = "Es un Not"
-                            Resultado.fila = raiz.childs[0].fila
-                            Resultado.columna = raiz.childs[0].columna
                             return Resultado
                         }
                     } else if (raiz.childs[0].value == "-") {
@@ -72,16 +74,12 @@ class Operacion {
                             Resultado.tipo = "integer"
                             Resultado.valor = -Resultado1.valor
                             Resultado.entorno = "Es una Negacion unaria"
-                            Resultado.fila = raiz.childs[0].fila
-                            Resultado.columna = raiz.childs[0].columna
                             return Resultado
                         } else if (Resultado1.tipo == "double") {
                             Resultado = new ResultadoOp();
                             Resultado.tipo = "double"
                             Resultado.valor = -Resultado1.valor
                             Resultado.entorno = "Es una Negacion Unaria"
-                            Resultado.fila = raiz.childs[0].fila
-                            Resultado.columna = raiz.childs[0].columna
                             return Resultado
                         }
                     }
@@ -92,7 +90,9 @@ class Operacion {
                 break;
             case "id":
                 Resultado = new ResultadoOp();
-                let simbolo = Consulta.ObtenerInstancia().obtener(raiz.value);
+                simbolo = Consulta.ObtenerInstancia().obtener(raiz.value);
+                console.log(simbolo)
+                console.log("quetal")
                 Resultado.tipo = simbolo.tipo;
                 Resultado.valor = simbolo.valor;
                 Resultado.entorno = simbolo.entorno;
@@ -103,7 +103,9 @@ class Operacion {
 
             case "elemento":
                 Resultado = new ResultadoOp();
-                let simbolo = Consulta.ObtenerInstancia().obtener(raiz.value);
+                console.log(raiz.value)
+                simbolo = Consulta.ObtenerInstancia().obtener(raiz.value);
+                console - log(simbolo)
                 Resultado.tipo = simbolo.tipo;
                 Resultado.valor = simbolo.valor;
                 Resultado.entorno = simbolo.entorno;
@@ -119,8 +121,6 @@ class Operacion {
                 Resultado.tipo = "double";
                 Resultado.valor = parseFloat(raiz.value);
                 Resultado.entorno = "Es un numero Decimal";
-                Resultado.fila = raiz.childs[0].fila
-                Resultado.columna = raiz.childs[0].columna;
                 return Resultado
 
 
@@ -129,8 +129,6 @@ class Operacion {
                 Resultado.tipo = "integer";
                 Resultado.valor = parseInt(raiz.value);
                 Resultado.entorno = "Es un numero Entero";
-                Resultado.fila = raiz.childs[0].fila
-                Resultado.columna = raiz.childs[0].columna;
                 return Resultado
 
             case "true":
@@ -138,8 +136,6 @@ class Operacion {
                 Resultado.tipo = "boolean";
                 Resultado.valor = true;
                 Resultado.entorno = "Es Verdadero";
-                Resultado.fila = raiz.childs[0].fila
-                Resultado.columna = raiz.childs[0].columna;
                 return Resultado;
 
 
@@ -148,8 +144,6 @@ class Operacion {
                 Resultado.tipo = "boolean";
                 Resultado.valor = false;
                 Resultado.entorno = "Es Falso";
-                Resultado.fila = raiz.childs[0].fila
-                Resultado.columna = raiz.childs[0].columna;
                 return Resultado;
 
             case "string":
@@ -157,8 +151,6 @@ class Operacion {
                 Resultado.tipo = "string";
                 Resultado.valor = raiz.value;
                 Resultado.entorno = "Es una Cadena";
-                Resultado.fila = raiz.childs[0].fila
-                Resultado.columna = raiz.childs[0].columna;
                 return Resultado;
 
             case "char":
@@ -166,8 +158,6 @@ class Operacion {
                 Resultado.tipo = "char";
                 Resultado.valor = raiz.value;
                 Resultado.entorno = "Es un Caracter";
-                Resultado.fila = raiz.childs[0].fila
-                Resultado.columna = raiz.childs[0].columna;
                 return Resultado;
 
             default:
@@ -206,6 +196,133 @@ class Operacion {
 
     }
 
+    aritmetico1(R1, fila, columna, op) {
+        let tipo1 = R1.tipo;
+        var res = new ResultadoOp();
+        if (tipo1 == "error") {
+            res.tipo = "error";
+            return res;
+        }
+
+        switch (op) {
+            case "++":
+                switch (tipo1) {
+                    case "integer":
+                        res.tipo = "integer";
+                        res.valor = R1.valor + 1;
+                        res.entorno = "Operador Aritmetico"
+                        res.fila = fila
+                        res.columna = columna
+                        return res;
+                    case "double":
+                        res.tipo = "double";
+                        res.valor = R1.valor + 1;
+                        res.entorno = "Operador Aritmetico"
+                        res.fila = fila
+                        res.columna = columna
+                        return res;
+                    case "string":
+                        res.tipo = "string";
+                        res.valor = R1.valor + 1;
+                        res.entorno = "Operador Aritmetico"
+                        res.fila = fila
+                        res.columna = columna
+                        return res;
+                    case "char":
+                        res.tipo = "integer";
+                        res.valor = R1.valor.charCodeAt(0) + 1;
+                        res.entorno = "Operador Aritmetico"
+                        res.fila = fila
+                        res.columna = columna
+                        return res;
+                    case "boolean":
+                        res.tipo = "integer";
+                        switch (R1.valor) {
+                            case "true":
+                                res.valor = 1 + 1;
+                                res.entorno = "Operador Aritmetico"
+                                res.fila = fila
+                                res.columna = columna
+                                return res;
+
+                            case "false":
+                                res.valor = 0 + 1;
+                                res.entorno = "Operador Aritmetico"
+                                res.fila = fila
+                                res.columna = columna
+                                return res;
+                        }
+                    default:
+                        Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + 1, fila, columna));
+                        res.tipo = "error";
+                        res.valor = "error";
+                        res.entorno = "error"
+                        res.fila = fila
+                        res.columna = columna
+                        console.error("Semantico " + "No es posible operacion entre: " + tipo1 + ' % ' + 1 + " En la fila: " + fila + " En la columna: " + columna)
+                        return res;
+                }
+            case "--":
+                switch (tipo1) {
+                    case "integer":
+                        res.tipo = "integer";
+                        res.valor = R1.valor - 1;
+                        res.entorno = "Operador Aritmetico"
+                        res.fila = fila
+                        res.columna = columna
+                        return res;
+                    case "double":
+                        res.tipo = "double";
+                        res.valor = R1.valor - 1;
+                        res.entorno = "Operador Aritmetico"
+                        res.fila = fila
+                        res.columna = columna
+                        return res;
+                    case "string":
+                        res.tipo = "string";
+                        res.valor = R1.valor - 1;
+                        res.entorno = "Operador Aritmetico"
+                        res.fila = fila
+                        res.columna = columna
+                        return res;
+                    case "char":
+                        res.tipo = "integer";
+                        res.valor = R1.valor.charCodeAt(0) - 1;
+                        res.entorno = "Operador Aritmetico"
+                        res.fila = fila
+                        res.columna = columna
+                        return res;
+                    case "boolean":
+                        res.tipo = "integer";
+                        switch (R1.valor) {
+                            case "true":
+                                res.valor = 1 - 1;
+                                res.entorno = "Operador Aritmetico"
+                                res.fila = fila
+                                res.columna = columna
+                                return res;
+
+                            case "false":
+                                res.valor = 0 - 1;
+                                res.entorno = "Operador Aritmetico"
+                                res.fila = fila
+                                res.columna = columna
+                                return res;
+                        }
+                    default:
+                        Func_Error.ObtenerInstancia().insertar(new Cons_Error("Semantico", "No es posible operacion entre: " + tipo1 + ' % ' + 1, fila, columna));
+                        res.tipo = "error";
+                        res.valor = "error";
+                        res.entorno = "error"
+                        res.fila = fila
+                        res.columna = columna
+                        console.error("Semantico " + "No es posible operacion entre: " + tipo1 + ' % ' + 1 + " En la fila: " + fila + " En la columna: " + columna)
+                        return res;
+                }
+        }
+
+    }
+
     aritmetico(R1, R2, fila, columna, op) {
 
         let tipo1 = R1.tipo;
@@ -217,7 +334,6 @@ class Operacion {
         }
         switch (op) {
             case "+":
-            case "++":
                 switch (tipo1) {
                     case "integer":
                         switch (tipo2) {
@@ -445,7 +561,6 @@ class Operacion {
                         return res;
                 }
             case "-":
-            case "--":
                 switch (tipo1) {
                     case "integer":
                         switch (tipo2) {
