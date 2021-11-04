@@ -35,7 +35,7 @@
 "writeline"         return 'P_WRITELINE'
 "tolower"           return 'P_TOLOWER'
 "toupper"           return 'P_TOUPPER'
-"lenght"            return 'P_LENGHT'
+"length"            return 'P_LENGTH'
 "truncate"          return 'P_TRUNCATE'
 "round"             return 'P_ROUND'
 "typeof"            return 'P_TYPEOF'
@@ -233,6 +233,7 @@ SENTENCIA:  P_INT    VARINT   P_PUNTOYCOMA   {$$=$2}
            | P_DYNAMICLIST   P_MENOR  P_BOOLEAN  P_MAYOR  LISTBOOLEAN   P_PUNTOYCOMA  {$$=$5}
            | P_DYNAMICLIST   P_MENOR  P_DOUBLE  P_MAYOR  LISTDOUBLE    P_PUNTOYCOMA  {$$=$5}
            |IF           {$$=$1}
+           |BLOQUE          {$$=$1}
            |SWITCH        {$$=$1}
            |BREAK    P_PUNTOYCOMA   {$$=$1}
            |WHILE                    {$$=$1}
@@ -372,7 +373,7 @@ VALORESDOUBLE: VALORESDOUBLE   P_COMA   EXP   {$1.addChilds($3); $$=$1;}
 
 VARINT:   VARIABLEINT   {$$= new AST_Node("DECLARACION INT","DECLARACION INT",this._$.first_line,@1.first_column); $$.addChilds($1)}
          |VARIABLEINT1  {$$= new AST_Node("ASIGNACION INT","ASIGNACION INT",this._$.first_line,@1.first_column); $$.addChilds($1)}
-         |VARIABLEINT2  {$$= new AST_Node("LENGHT INT","LENGHT INT",this._$.first_line,@1.first_column); $$.addChilds($1)}
+         |VARIABLEINT2  {$$= new AST_Node("LENGTH INT","LENGTH INT",this._$.first_line,@1.first_column); $$.addChilds($1)}
          |VARIABLEINT3  {$$= new AST_Node("TRUNCATE INT","TRUNCATE INT",this._$.first_line,@1.first_column); $$.addChilds($1)}
          |VARIABLEINT4  {$$= new AST_Node("CASTEO INT","CASTEO INT",this._$.first_line,@1.first_column); $$.addChilds($1)};
 
@@ -383,7 +384,7 @@ VARIABLEINT1: P_ID  P_COMA  VARIABLEINT1     {$3.addChilds(new AST_Node("ID",$1,
           | P_ID  P_IGUAL    EXP           {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$3);} ;
 
 VARIABLEINT2: P_ID  P_COMA  VARIABLEINT2     {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
-           | P_ID  P_IGUAL  P_LENGHT  P_PAR1  EXP  P_PAR2  {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$5);};
+           | P_ID  P_IGUAL  P_LENGTH  P_PAR1  EXP  P_PAR2  {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$5);};
 
 VARIABLEINT3: P_ID  P_COMA  VARIABLEINT3     {$3.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column)); $$=$3;}
            | P_ID  P_IGUAL  P_TRUNCATE  P_PAR1  EXP  P_PAR2  {$$= new AST_Node("VARIABLE INT","VARIABLE INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$5);};
@@ -486,39 +487,41 @@ VARIABLECHAR2:  P_ID   P_COMA     VARIABLECHAR2           {$3.addChilds(new AST_
 
 
 
-DECLARACION:  P_ID   P_IGUAL   EXP 
-              |P_ID   P_IGUAL  P_PAR1   TIPO  P_PAR2  EXP
-              |P_ID  P_COMA  DECLARACION  
-              |P_ID   P_IGUAL  P_LENGHT  P_PAR1  EXP  P_PAR2  
-              |P_ID   P_IGUAL  P_TRUNCATE  P_PAR1  EXP  P_PAR2 
-              |P_ID   P_IGUAL  P_ROUND  P_PAR1   EXP   P_PAR2  
-              |P_ID MAYMEN;
+DECLARACION:  P_ID   P_IGUAL   EXP                      {$$=new AST_Node("ASIGNAR","ASIGNAR",this._$.first_line,@1.last_column); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.last_column),$3);}  
+              |P_ID   P_IGUAL  P_PAR1   TIPO  P_PAR2  EXP  {$$=new AST_Node("ASIGNAR CASTEO","ASIGNAR CASTEO",this._$.first_line,@1.last_column); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.last_column),$6);}  
+              |P_ID   P_IGUAL  P_LENGTH  P_PAR1  EXP  P_PAR2  {$$=new AST_Node("ASIGNAR LENGTH","ASIGNAR LENGTH",this._$.first_line,@1.last_column); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.last_column),$5);}  
+              |P_ID   P_IGUAL  P_TRUNCATE  P_PAR1  EXP  P_PAR2   {$$=new AST_Node("ASIGNAR TRUNCATE","ASIGNAR TRUNCATE",this._$.first_line,@1.last_column); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.last_column),$5);}  
+              |P_ID   P_IGUAL  P_ROUND  P_PAR1   EXP   P_PAR2   {$$=new AST_Node("ASIGNAR ROUND","ASIGNAR ROUND",this._$.first_line,@1.last_column); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.last_column),$5);}  
+              |P_ID    P_IGUAL  P_TOLOWER  P_PAR1  EXP  P_PAR2  {$$=new AST_Node("ASIGNAR TOLOWER","ASIGNAR TOLOWER",this._$.first_line,@1.last_column); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.last_column),$5);}  
+              |P_ID  P_IGUAL   P_TOUPPER  P_PAR1  EXP  P_PAR2    {$$=new AST_Node("ASIGNAR TOUPPER","ASIGNAR TOUPPER",this._$.first_line,@1.last_column); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.last_column),$5);}  
+              |P_ID  P_IGUAL   P_TYPEOF  P_PAR1  EXP  P_PAR2     {$$=new AST_Node("ASIGNAR TYPEOF","ASIGNAR TYPEOF",this._$.first_line,@1.last_column); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.last_column),$5);}  
+              |P_ID  P_IGUAL   P_TOSTRING  P_PAR1  EXP  P_PAR2   {$$=new AST_Node("ASIGNAR TOSTRING","ASIGNAR TOSTRING",this._$.first_line,@1.last_column); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.last_column),$5);}  ;
 
 
 
  
-LISTAINT:   P_ID   P_IGUAL   P_NEW   P_DYNAMICLIST   P_MENOR  P_INT  P_MAYOR  ;
+LISTAINT:   P_ID   P_IGUAL   P_NEW   P_DYNAMICLIST   P_MENOR  P_INT  P_MAYOR  {$$= new AST_Node("LISTA INT","LISTA INT"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column));} ;
 
-LISTASTRING:    P_ID   P_IGUAL   P_NEW   P_DYNAMICLIST   P_MENOR  P_STRING  P_MAYOR  ;
+LISTASTRING:    P_ID   P_IGUAL   P_NEW   P_DYNAMICLIST   P_MENOR  P_STRING  P_MAYOR  {$$= new AST_Node("LISTA STRING","LISTA STRING"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column));} ;
 
-LISTACHAR:   P_ID   P_IGUAL   P_NEW   P_DYNAMICLIST   P_MENOR  P_CHAR  P_MAYOR ;  
+LISTACHAR:   P_ID   P_IGUAL   P_NEW   P_DYNAMICLIST   P_MENOR  P_CHAR  P_MAYOR {$$= new AST_Node("LISTA CHAR","LISTA CHAR"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column));} ;  
 
-LISTACHAR1:   P_ID   P_IGUAL   P_TOCHARARRAY    P_PAR1   EXP  P_PAR2  ;
+LISTACHAR1:   P_ID   P_IGUAL   P_TOCHARARRAY    P_PAR1   EXP  P_PAR2  {$$= new AST_Node("LISTA CHAR","LISTA CHAR"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column),$5);};
 
-LISTABOOLEAN:    P_ID   P_IGUAL   P_NEW   P_DYNAMICLIST   P_MENOR  P_BOOLEAN  P_MAYOR  ;
+LISTABOOLEAN:    P_ID   P_IGUAL   P_NEW   P_DYNAMICLIST   P_MENOR  P_BOOLEAN  P_MAYOR  {$$= new AST_Node("LISTA BOOLEAN","LISTA BOOLEAN"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column));} ;
 
-LISTADOUBLE:    P_ID   P_IGUAL   P_NEW   P_DYNAMICLIST   P_MENOR  P_DOUBLE  P_MAYOR  ;
+LISTADOUBLE:    P_ID   P_IGUAL   P_NEW   P_DYNAMICLIST   P_MENOR  P_DOUBLE  P_MAYOR  {$$= new AST_Node("LISTA DOUBLE","LISTA DOUBLE"); $$.addChilds(new AST_Node("ID",$1,this._$.first_line,@1.first_column));} ;
 
 
-APPENDLISTA:  P_APPEND  P_PAR1   P_ID   P_COMA  EXP  P_PAR2  ;
+APPENDLISTA:  P_APPEND  P_PAR1   P_ID   P_COMA  EXP  P_COMA  P_ENTERO  P_PAR2  {$$=new AST_Node("ASIGNAR LISTA","ASIGNAR LISTA",this._$.first_line,@1.last_column); var aux = new AST_Node("POSICION",$7,this._$.first_line,@6.last_column); aux.addChilds($7); $$.addChilds(new AST_Node("ID",$3,this._$.first_line,@1.last_column),$5,aux);}  ;
 
 
 IF: P_IF   P_PAR1    EXP    P_PAR2  BLOQUE   {$$= new AST_Node("IF","IF",this._$.first_line,@1.last_column);$$.addChilds($3,$5)}
     |P_IF   P_PAR1    EXP    P_PAR2  BLOQUE  P_ELSE  ELSE  {$$= new AST_Node("IF","IF",this._$.first_line,@1.last_column); var aux = new AST_Node("ELSE","ELSE",this._$.first_line,@6.last_column); aux.addChilds($7);$$.addChilds($3,$5,aux)};
 
 
-ELSE:   IF
-       |BLOQUE   ;
+ELSE:   IF          {$$=$1}
+       |BLOQUE      {$$=$1};
 
 
 
@@ -584,11 +587,10 @@ LISTVALUE:  LISTVALUE   P_COMA   EXP
 TERNARIO: P_ID  P_IGUAL  EXP   P_PREGUNTA  EXP    P_DOSPUNTOS      EXP  ;
 
 
-DECLA_VECTOR:  P_ID  P_CORCHETE1  P_ENTERO  P_CORCHETE2   P_IGUAL   EXP 
-              |P_ID  P_CORCHETE1  P_ENTERO  P_CORCHETE2   P_IGUAL  P_PAR1   TIPO  P_PAR2   EXP
-              |P_ID  P_CORCHETE1  P_ENTERO  P_CORCHETE2   P_COMA  DECLA_VECTOR ; 
+DECLA_VECTOR:  P_ID  P_CORCHETE1  P_ENTERO  P_CORCHETE2   P_IGUAL   EXP             {$$=new AST_Node("ASIGNAR VECTOR","ASIGNAR VECTOR",this._$.first_line,@1.last_column); $$.addChilds(new AST_Node("ID",$1+"["+$3+"]",this._$.first_line,@1.last_column),$6);}  
+              |P_ID  P_CORCHETE1  P_ENTERO  P_CORCHETE2   P_IGUAL  P_PAR1   TIPO  P_PAR2   EXP   {$$=new AST_Node("ASIGNAR CASTEO VECTOR","ASIGNAR CASTEO VECTOR",this._$.first_line,@1.last_column); $$.addChilds(new AST_Node("ID",$1+"["+$3+"]",this._$.first_line,@1.last_column),$9);}  ; 
 
-GETVAL: P_GETVALUE   P_PAR1   P_ID  P_COMA   EXP   P_PAR2  ;
+GETVAL: P_GETVALUE   P_PAR1   P_ID  P_COMA   EXP   P_PAR2   {$$= new AST_Node("EXP","EXP",this._$.first_line,@1.last_column);$$.addChilds(new AST_Node("elemento",$3+"["+$5+"]",this._$.first_line,@1.last_column));};
 
 
 SETVAL: P_SETVALUE  P_PAR1  P_ID   P_COMA  EXP  P_COMA  EXP  P_PAR2  ;

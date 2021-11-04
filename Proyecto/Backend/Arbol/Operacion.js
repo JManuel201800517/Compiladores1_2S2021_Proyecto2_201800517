@@ -105,7 +105,7 @@ class Operacion {
                 Resultado = new ResultadoOp();
                 console.log(raiz.value)
                 simbolo = Consulta.ObtenerInstancia().obtener(raiz.value);
-                console - log(simbolo)
+                console.log(simbolo)
                 Resultado.tipo = simbolo.tipo;
                 Resultado.valor = simbolo.valor;
                 Resultado.entorno = simbolo.entorno;

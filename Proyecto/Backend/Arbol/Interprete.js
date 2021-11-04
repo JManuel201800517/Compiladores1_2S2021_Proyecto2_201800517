@@ -17,9 +17,14 @@ class Interprete {
     let res;
     let gg;
     let simbolo;
+    let simboloerr;
     let codigo = "";
     let vec;
     let lec;
+    var list;
+    let simboloT = 0;
+    let n;
+    var ata = new Array();
     if (raiz === undefined || raiz === null) return;
 
 
@@ -47,6 +52,172 @@ class Interprete {
           Consulta.ObtenerInstancia().insertar(simbolo)
         }
         break;
+      case "DECLARACION LISTA INT":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        list = vec.value;
+        console.log(list);
+        var list = new Array();
+        //ata.push(list)
+        console.log(list);
+        list.push(vec.value)
+        list.push(12);
+        list.push(23);
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Lista", "", "integer", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        //ata.push(list)
+        //console.log(ata)
+        break;
+      case "ASIGNAR LISTA":
+        simbolo = Consulta.ObtenerInstancia().obtener(raiz.childs[0].value)
+        op = new Operacion();
+        res = op.ejecutar(raiz.childs[1])
+        console.log(raiz.childs[0].value)
+        console.log(res.valor)
+        lec = raiz.childs[0].value;
+
+        
+
+        if (simbolo.entorno == res.tipo) {
+          console.log("aqui funciona")
+          console.log(raiz.childs[2].value)
+
+          /*for(let u=0; u < 1000; u++){
+            simbolo = Consulta.ObtenerInstancia().obtener(raiz.childs[0].value+"["+u+"]")
+
+            if (raiz.childs[0].value+"["+u+"]" == ){}
+
+          }*/
+
+          simbolo = new Constructor(raiz.childs[0].value+"["+raiz.childs[2].value+"]", res.tipo, res.valor, "lista", simbolo.fila, simbolo.columna)
+          Consulta.ObtenerInstancia().insertar(simbolo)
+
+
+        } else {
+          simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.entorno + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+          Func_Error.ObtenerInstancia().insertar(simboloerr)
+          console.log(simboloerr)
+        }
+
+        break;
+      case "DECLARACION LISTA STRING":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        list = vec.value;
+        console.log(list);
+        var list = new Array();
+        console.log(list);
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Lista", "", "string", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        break;
+      case "DECLARACION LISTA CHAR":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        list = vec.value;
+        console.log(list);
+        var list = new Array();
+        console.log(list);
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Lista", "", "char", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        break;
+      case "DECLARACION LISTA BOOLEAN":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        list = vec.value;
+        console.log(list);
+        var list = new Array();
+        console.log(list);
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Lista", "", "boolean", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        break;
+      case "DECLARACION LISTA DOUBLE":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        list = vec.value;
+        console.log(list);
+        var list = new Array();
+        console.log(list);
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Lista", "", "double", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        break;
+
+      case "ARREGLO LISTA CHAR":
+        vec = raiz.childs[0].childs[0]
+
+        console.log(vec)
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs[1].childs)
+        list = vec.value;
+        console.log(list);
+        var list = new Array();
+        console.log(list);
+        simbolo = new Constructor(vec.value, "Lista", "", "char", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+
+        gg = raiz.childs[0].childs[1]
+        console.log(gg)
+
+        op = new Operacion();
+        res = op.ejecutar(gg)
+        //console.log(res.valor)
+        lec = res.valor
+
+        console.log(lec)
+        n = 0;
+
+
+        for (let i = 0; i < lec.length; i++) {
+
+
+          if (res.tipo == "string") {
+            simbolo = new Constructor(vec.value + "[" + i + "]", "char", res.valor.charAt(n), "lista", vec.fila, vec.columna)
+            console.log(vec)
+            console.log(vec.value)
+            Consulta.ObtenerInstancia().insertar(simbolo)
+            list.push(res.valor.charAt(n))
+            n = n + 1
+
+          } else {
+            simbolo = new Cons_Error("Sintactico", "No es un valor integer", vec.fila, vec.columna)
+            Func_Error.ObtenerInstancia().insertar(simbolo)
+            n = n + 1
+
+
+          }
+        }
+        console.log(list)
+
+        break;
       case "ASIGNACION VECTOR INT":
         vec = raiz.childs[0].childs[0]
         lec = raiz.childs[0].childs[1].childs.length
@@ -62,7 +233,7 @@ class Interprete {
 
           op = new Operacion();
           res = op.ejecutar(gg)
-          if ( res.tipo == "integer") {
+          if (res.tipo == "integer") {
             simbolo = new Constructor(vec.value + "[" + i + "]", "integer", res.valor, "Vector", vec.fila, vec.columna)
             console.log(vec)
             console.log(vec.value)
@@ -454,7 +625,7 @@ class Interprete {
 
         })
         break;
-      case "LENGHT INT":
+      case "LENGTH INT":
         raiz.childs[0].childs.forEach(hijo => {
           console.log(hijo.fila)
           console.log(hijo.columna)
@@ -686,14 +857,210 @@ class Interprete {
         })
         break;
 
-      case "ASIGNA":
+      case "ASIGNAR":
         simbolo = Consulta.ObtenerInstancia().obtener(raiz.childs[0].value)
-        op = new Operador();
+        op = new Operacion();
         res = op.ejecutar(raiz.childs[1])
-        simbolo.tipo = res.tipo;
-        simbolo.valor = res.valor;
-        Consulta.ObtenerInstancia().modificar(simbolo)
-        console.log(res)
+        if (simbolo.tipo == res.tipo) {
+          simbolo.valor = res.valor;
+          Consulta.ObtenerInstancia().modificar(simbolo)
+          console.log(res)
+
+        } else {
+          simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+          Func_Error.ObtenerInstancia().insertar(simboloerr)
+          console.log(simboloerr)
+        }
+
+        break;
+      case "ASIGNAR VECTOR":
+        simbolo = Consulta.ObtenerInstancia().obtener(raiz.childs[0].value)
+        op = new Operacion();
+        res = op.ejecutar(raiz.childs[1])
+        if (simbolo.tipo == res.tipo) {
+          simbolo.valor = res.valor;
+          Consulta.ObtenerInstancia().modificar(simbolo)
+          console.log(res)
+
+        } else {
+          simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+          Func_Error.ObtenerInstancia().insertar(simboloerr)
+          console.log(simboloerr)
+        }
+
+        break;
+      case "ASIGNAR TOLOWER":
+        simbolo = Consulta.ObtenerInstancia().obtener(raiz.childs[0].value)
+        op = new Operacion();
+        res = op.ejecutar(raiz.childs[1])
+        if (simbolo.tipo == "string") {
+          if (res.tipo == "string") {
+            simbolo.valor = res.valor.toLowerCase();
+            Consulta.ObtenerInstancia().modificar(simbolo)
+            console.log(res)
+          } else {
+            simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+            Func_Error.ObtenerInstancia().insertar(simboloerr)
+            console.log(simboloerr)
+
+          }
+
+        } else {
+          simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+          Func_Error.ObtenerInstancia().insertar(simboloerr)
+          console.log(simboloerr)
+        }
+
+        break;
+      case "ASIGNAR TOUPPER":
+        simbolo = Consulta.ObtenerInstancia().obtener(raiz.childs[0].value)
+        op = new Operacion();
+        res = op.ejecutar(raiz.childs[1])
+        if (simbolo.tipo == "string") {
+          if (res.tipo == "string") {
+            simbolo.valor = res.valor.toUpperCase();
+            Consulta.ObtenerInstancia().modificar(simbolo)
+            console.log(res)
+          } else {
+            simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+            Func_Error.ObtenerInstancia().insertar(simboloerr)
+            console.log(simboloerr)
+
+          }
+
+        } else {
+          simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+          Func_Error.ObtenerInstancia().insertar(simboloerr)
+          console.log(simboloerr)
+        }
+
+        break;
+      case "ASIGNAR TYPEOF":
+        simbolo = Consulta.ObtenerInstancia().obtener(raiz.childs[0].value)
+        op = new Operacion();
+        res = op.ejecutar(raiz.childs[1])
+        if (simbolo.tipo == "string") {
+          //if (res.tipo == "string") {
+          simbolo.valor = res.tipo;
+          Consulta.ObtenerInstancia().modificar(simbolo)
+          console.log(res)
+          /*} else {
+            simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+            Func_Error.ObtenerInstancia().insertar(simboloerr)
+            console.log(simboloerr)
+
+          }*/
+
+        } else {
+          simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+          Func_Error.ObtenerInstancia().insertar(simboloerr)
+          console.log(simboloerr)
+        }
+
+        break;
+      case "ASIGNAR TOSTRING":
+        simbolo = Consulta.ObtenerInstancia().obtener(raiz.childs[0].value)
+        op = new Operacion();
+        res = op.ejecutar(raiz.childs[1])
+        if (simbolo.tipo == "string") {
+          //if (res.tipo == "string") {
+          simbolo.valor = res.valor.toString();
+          Consulta.ObtenerInstancia().modificar(simbolo)
+          console.log(res)
+          /*} else {
+            simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+            Func_Error.ObtenerInstancia().insertar(simboloerr)
+            console.log(simboloerr)
+
+          }*/
+
+        } else {
+          simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+          Func_Error.ObtenerInstancia().insertar(simboloerr)
+          console.log(simboloerr)
+        }
+
+        break;
+      case "ASIGNAR LENGTH":
+        simbolo = Consulta.ObtenerInstancia().obtener(raiz.childs[0].value)
+        op = new Operacion();
+        res = op.ejecutar(raiz.childs[1])
+
+        if (simbolo.tipo == "integer") {
+          simbolo.valor = (res.valor).length;
+          Consulta.ObtenerInstancia().modificar(simbolo)
+          console.log(res)
+
+        } else {
+          simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo integer", simbolo.fila, simbolo.columna)
+          Func_Error.ObtenerInstancia().insertar(simboloerr)
+          console.log(simboloerr)
+        }
+
+        break;
+      case "ASIGNAR ROUND":
+        simbolo = Consulta.ObtenerInstancia().obtener(raiz.childs[0].value)
+        op = new Operacion();
+        res = op.ejecutar(raiz.childs[1])
+
+        if (simbolo.tipo == "double") {
+          if (res.tipo == "integer") {
+
+            simbolo.valor = Math.round(res.valor).toFixed(2);
+            Consulta.ObtenerInstancia().modificar(simbolo)
+            console.log(res)
+
+          } else if (res.tipo == "double") {
+
+            simbolo.valor = Math.round(res.valor).toFixed(2);
+            Consulta.ObtenerInstancia().modificar(simbolo)
+            console.log(res)
+
+          } else {
+            simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo " + res.tipo, simbolo.fila, simbolo.columna)
+            Func_Error.ObtenerInstancia().insertar(simboloerr)
+            console.log(simboloerr)
+          }
+
+        } else {
+          simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+          Func_Error.ObtenerInstancia().insertar(simboloerr)
+          console.log(simboloerr)
+        }
+
+        break;
+
+      case "ASIGNAR TRUNCATE":
+        simbolo = Consulta.ObtenerInstancia().obtener(raiz.childs[0].value)
+        op = new Operacion();
+        res = op.ejecutar(raiz.childs[1])
+
+        if (simbolo.tipo == "integer") {
+
+          if (res.tipo == "integer") {
+
+            simbolo.valor = Math.trunc(res.valor);
+            Consulta.ObtenerInstancia().modificar(simbolo)
+            console.log(res)
+
+          } else if (res.tipo == "double") {
+
+            simbolo.valor = Math.trunc(res.valor);
+            Consulta.ObtenerInstancia().modificar(simbolo)
+            console.log(res)
+
+          } else {
+            simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo " + res.tipo, simbolo.fila, simbolo.columna)
+            Func_Error.ObtenerInstancia().insertar(simboloerr)
+            console.log(simboloerr)
+          }
+
+        } else {
+          simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+          Func_Error.ObtenerInstancia().insertar(simboloerr)
+          console.log(simboloerr)
+        }
+
         break;
       case "WRITELINE":
         op = new Operacion();
@@ -703,7 +1070,7 @@ class Interprete {
         return codigo;
 
       case "IF":
-        op = new Operador();
+        op = new Operacion();
         res = op.ejecutar(raiz.childs[0])
 
         if (res.tipo == "boolean") {
@@ -722,7 +1089,7 @@ class Interprete {
         }
 
       case "DO_WHILE":
-        op = new Operador()
+        op = new Operacion()
         res = op.ejecutar(raiz.childs[1])
 
         do {
@@ -731,7 +1098,7 @@ class Interprete {
         } while (res.valor)
         break;
       case "WHILE":
-        op = new Operador()
+        op = new Operacion()
         res = op.ejecutar(raiz.childs[0])
         while (res.valor) {
           codigo += this.interpretar(raiz.childs[1].childs[0])
