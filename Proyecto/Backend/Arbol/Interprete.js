@@ -22,8 +22,10 @@ class Interprete {
     let vec;
     let lec;
     var list;
-    let simboloT = 0;
+    let simboloT;
+    let yy;
     let n;
+    let num;
     var ata = new Array();
     if (raiz === undefined || raiz === null) return;
 
@@ -36,6 +38,186 @@ class Interprete {
       case "SENTENCIAS":
         raiz.childs.forEach(hijo => codigo += this.interpretar(hijo))
         return codigo;
+      case "START":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Start", "", "start", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        console.log(raiz.childs[0].childs[1].childs.length)
+
+        var para = new Array();
+
+        for (let i = 0; i < raiz.childs[0].childs[1].childs.length; i++) {
+          simboloT = raiz.childs[0].childs[1].childs[i].value
+          console.log(simboloT)
+
+          op = new Operacion();
+          res = op.ejecutar(raiz.childs[0].childs[1].childs[i].value)
+
+          console.log(res)
+
+          simbolo = new Constructor(res.valor, "", "", "Parametro", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(res.valor)
+          Consulta.ObtenerInstancia().insertar(simbolo)
+
+          para.push(simboloT)
+
+        }
+
+        yy = vec.value
+
+
+        /*function yy() {
+ 
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+            
+        }*/
+
+        break;
+      case "START SIN PARAMETROS":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Start", "", "start", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        //console.log(raiz.childs[0].childs[1].childs.length)
+
+        yy = vec.value
+
+
+        /*function yy() {
+ 
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+            
+        }*/
+
+        break;
+      case "METODOS":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Llamada", "", "llamada", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        console.log(raiz.childs[0].childs[1].childs[0].childs[0].childs.length)
+
+        var para = new Array();
+
+        for (let i = 0; i < raiz.childs[0].childs[1].childs[0].childs[0].childs.length; i++) {
+          simboloT = raiz.childs[0].childs[1].childs[0].childs[0].childs[i].value.split(" ")
+          console.log(simboloT)
+
+          simbolo = new Constructor(simboloT[1], simboloT[0], "", "Parametro", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(simboloT[1])
+          Consulta.ObtenerInstancia().insertar(simbolo)
+
+          para.push(simboloT[1])
+
+        }
+
+        yy = vec.value
+
+
+        /*function yy() {
+ 
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+            
+        }*/
+
+        break;
+      case "LLAMADA":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Metodo", "", "metodo", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        console.log(raiz.childs[0].childs[1].childs.length)
+
+        var para = new Array();
+
+        for (let i = 0; i < raiz.childs[0].childs[1].childs.length; i++) {
+          simboloT = raiz.childs[0].childs[1].childs[i].value
+          console.log(simboloT)
+
+          op = new Operacion();
+          res = op.ejecutar(raiz.childs[0].childs[1].childs[i].value)
+
+          console.log(res)
+
+          simbolo = new Constructor(res.valor, "", "", "Parametro", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(res.valor)
+          Consulta.ObtenerInstancia().insertar(simbolo)
+
+          para.push(simboloT)
+
+        }
+
+        yy = vec.value
+
+
+        /*function yy() {
+ 
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+            
+        }*/
+
+        break;
+      case "LLAMADA SIN PARAMETROS":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Metodo", "", "metodo", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        //console.log(raiz.childs[0].childs[1].childs.length)
+
+        yy = vec.value
+
+
+        /*function yy() {
+ 
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+            
+        }*/
+
+        break;
       case "DECLARACION VECTOR INT":
         vec = raiz.childs[0].childs[0]
         console.log(vec.fila)
@@ -51,6 +233,349 @@ class Interprete {
           console.log(vec.value)
           Consulta.ObtenerInstancia().insertar(simbolo)
         }
+        break;
+      case "FUNCION DOUBLE":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Funcion", "", "double", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        console.log(raiz.childs[0].childs[1].childs[0].childs[0].childs.length)
+
+        var para = new Array();
+
+        for (let i = 0; i < raiz.childs[0].childs[1].childs[0].childs[0].childs.length; i++) {
+          simboloT = raiz.childs[0].childs[1].childs[0].childs[0].childs[i].value.split(" ")
+          console.log(simboloT)
+
+          simbolo = new Constructor(simboloT[1], simboloT[0], "", "Parametro", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(simboloT[1])
+          Consulta.ObtenerInstancia().insertar(simbolo)
+
+          para.push(simboloT[1])
+
+        }
+
+        yy = vec.value
+
+
+        /*function yy() {
+
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+            
+        }*/
+
+        break;
+      case "METODOS SIN PARAMETROS":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Metodo", "", "metodo", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+
+        yy = vec.value
+
+
+        /* function yy() {
+ 
+           raiz.childs[0].childs[2].childs.forEach(nodito => {
+             codigo += this.interpretar(nodito);
+           });
+             
+         }*/
+
+        break;
+      case "FUNCION DOUBLE SIN PARA":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Funcion", "", "double", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+
+        yy = vec.value
+
+
+        /*function yy() {
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+
+        }*/
+
+        break;
+      case "FUNCION INT":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Funcion", "", "integer", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        console.log(raiz.childs[0].childs[1].childs[0].childs[0].childs.length)
+
+        var para = new Array();
+
+        for (let i = 0; i < raiz.childs[0].childs[1].childs[0].childs[0].childs.length; i++) {
+          simboloT = raiz.childs[0].childs[1].childs[0].childs[0].childs[i].value.split(" ")
+          console.log(simboloT)
+
+          simbolo = new Constructor(simboloT[1], simboloT[0], "", "Parametro", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(simboloT[1])
+          Consulta.ObtenerInstancia().insertar(simbolo)
+
+          para.push(simboloT[1])
+
+        }
+
+        yy = vec.value
+
+
+        /*function yy() {
+
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+            
+        }*/
+
+        break;
+      case "FUNCION INT SIN PARA":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Funcion", "", "integer", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+
+        yy = vec.value
+
+
+        /*function yy() {
+
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+
+        }*/
+
+        break;
+      case "FUNCION CHAR":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Funcion", "", "char", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        console.log(raiz.childs[0].childs[1].childs[0].childs[0].childs.length)
+
+        var para = new Array();
+
+        for (let i = 0; i < raiz.childs[0].childs[1].childs[0].childs[0].childs.length; i++) {
+          simboloT = raiz.childs[0].childs[1].childs[0].childs[0].childs[i].value.split(" ")
+          console.log(simboloT)
+
+          simbolo = new Constructor(simboloT[1], simboloT[0], "", "Parametro", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(simboloT[1])
+          Consulta.ObtenerInstancia().insertar(simbolo)
+
+          para.push(simboloT[1])
+
+        }
+
+        yy = vec.value
+
+
+        /*function yy() {
+
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+            
+        }*/
+
+        break;
+      case "FUNCION CHAR SIN PARA":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Funcion", "", "char", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+
+        yy = vec.value
+
+
+        /*function yy() {
+
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+
+        }*/
+
+        break;
+      case "FUNCION BOOLEAN":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Funcion", "", "boolean", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        console.log(raiz.childs[0].childs[1].childs[0].childs[0].childs.length)
+
+        var para = new Array();
+
+        for (let i = 0; i < raiz.childs[0].childs[1].childs[0].childs[0].childs.length; i++) {
+          simboloT = raiz.childs[0].childs[1].childs[0].childs[0].childs[i].value.split(" ")
+          console.log(simboloT)
+
+          simbolo = new Constructor(simboloT[1], simboloT[0], "", "Parametro", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(simboloT[1])
+          Consulta.ObtenerInstancia().insertar(simbolo)
+
+          para.push(simboloT[1])
+
+        }
+
+        yy = vec.value
+
+
+        /*function yy() {
+
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+            
+        }*/
+
+        break;
+      case "FUNCION BOOLEAN SIN PARA":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Funcion", "", "boolean", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+
+        yy = vec.value
+
+
+        /* function yy() {
+ 
+           raiz.childs[0].childs[2].childs.forEach(nodito => {
+             codigo += this.interpretar(nodito);
+           });
+ 
+         }*/
+
+        break;
+      case "FUNCION STRING":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Funcion", "", "string", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+        console.log(raiz.childs[0].childs[1].childs[0].childs[0].childs.length)
+
+        var para = new Array();
+
+        for (let i = 0; i < raiz.childs[0].childs[1].childs[0].childs[0].childs.length; i++) {
+          simboloT = raiz.childs[0].childs[1].childs[0].childs[0].childs[i].value.split(" ")
+          console.log(simboloT)
+
+          simbolo = new Constructor(simboloT[1], simboloT[0], "", "Parametro", vec.fila, vec.columna)
+          console.log(vec)
+          console.log(simboloT[1])
+          Consulta.ObtenerInstancia().insertar(simbolo)
+
+          para.push(simboloT[1])
+
+        }
+
+        yy = vec.value
+
+
+        /*function yy() {
+
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+            
+        }*/
+
+        break;
+      case "FUNCION STRING SIN PARA":
+        vec = raiz.childs[0].childs[0]
+        console.log(vec.fila)
+        console.log(vec.columna)
+        //console.log(raiz.childs[0].childs)
+        //console.log(raiz.childs[0].childs[1])
+        //list.push("kolokol");
+        //console.log(list);
+        //console.log(list[0]);
+        simbolo = new Constructor(vec.value, "Funcion", "", "string", vec.fila, vec.columna)
+        Consulta.ObtenerInstancia().insertar(simbolo)
+
+        yy = vec.value
+
+
+        /*function yy() {
+
+          raiz.childs[0].childs[2].childs.forEach(nodito => {
+            codigo += this.interpretar(nodito);
+          });
+
+        }*/
+
         break;
       case "DECLARACION LISTA INT":
         vec = raiz.childs[0].childs[0]
@@ -81,7 +606,7 @@ class Interprete {
         console.log(res.valor)
         lec = raiz.childs[0].value;
 
-        
+
 
         if (simbolo.entorno == res.tipo) {
           console.log("aqui funciona")
@@ -94,7 +619,7 @@ class Interprete {
 
           }*/
 
-          simbolo = new Constructor(raiz.childs[0].value+"["+raiz.childs[2].value+"]", res.tipo, res.valor, "lista", simbolo.fila, simbolo.columna)
+          simbolo = new Constructor(raiz.childs[0].value + "[" + raiz.childs[2].value + "]", res.tipo, res.valor, "lista", simbolo.fila, simbolo.columna)
           Consulta.ObtenerInstancia().insertar(simbolo)
 
 
@@ -460,6 +985,34 @@ class Interprete {
           }
 
         })
+        break;
+      case "SETVALUE":
+        simbolo = Consulta.ObtenerInstancia().obtener(raiz.childs[0].value)
+        op = new Operacion();
+        res = op.ejecutar(raiz.childs[1])
+        console.log(simbolo)
+        console.log(raiz.childs[0])
+        if (simbolo.entorno == "lista") {
+          if (simbolo.tipo == res.tipo) {
+            simbolo.valor = res.valor;
+            Consulta.ObtenerInstancia().modificar(simbolo)
+            console.log(res)
+
+
+          } else {
+            simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+            Func_Error.ObtenerInstancia().insertar(simboloerr)
+            console.log(simboloerr)
+
+
+          }
+
+        } else {
+          simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+          Func_Error.ObtenerInstancia().insertar(simboloerr)
+          console.log(simboloerr)
+        }
+
         break;
       case "TRUNCATE INT":
         raiz.childs[0].childs.forEach(hijo => {
@@ -1068,6 +1621,37 @@ class Interprete {
         codigo += res.valor + "\n"
         console.log(codigo)
         return codigo;
+      case "TERNARIO":
+        op = new Operacion();
+        //n = op.ejecutar(raiz)
+        simbolo = Consulta.ObtenerInstancia().obtener(raiz.value)
+        res = op.ejecutar(raiz.childs[0])
+        console.log(res)
+
+        yy = op.ejecutar(raiz.childs[1])
+        console.log(yy)
+
+        lec = op.ejecutar(raiz.childs[2].childs[0])
+        console.log(lec)
+
+        console.log(simbolo)
+        console.log(raiz.value)
+
+        if (res.tipo == "boolean") {
+          if (simbolo.valor == res.valor) {
+            codigo += this.interpretar(yy);
+            console.log("hola")
+            return codigo;
+          } else {
+            if (raiz.childs.length == 3) {
+              codigo += this.interpretar(lec)
+              console.log("adios")
+            }
+            return codigo;
+          }
+
+
+        }
 
       case "IF":
         op = new Operacion();
@@ -1081,8 +1665,17 @@ class Interprete {
             return codigo;
           } else {
             if (raiz.childs.length == 3) {
-              codigo += this.interpretar(raiz.childs[2].childs[0].childs[0])
+              if (raiz.childs[2].childs[0].value == "IF") {
+                codigo += this.interpretar(raiz.childs[2].childs[0])
+
+              } else {
+                codigo += this.interpretar(raiz.childs[2].childs[0].childs[0])
+              }
+
+              console.log(raiz.childs[2].childs[0].childs[0])
+              console.log(raiz.childs[2].childs[0])
             }
+            return codigo;
           }
 
 
@@ -1103,8 +1696,278 @@ class Interprete {
         while (res.valor) {
           codigo += this.interpretar(raiz.childs[1].childs[0])
           res = op.ejecutar(raiz.childs[0])
+          console.log(raiz.childs[1].childs[0])
+          console.log("AQUI MISMO")
         }
         break;
+      case "FOR":
+        op = new Operacion()
+
+        console.log(raiz)
+        //res = op.ejecutar(raiz.childs[0])
+        console.log(raiz.childs[0].childs)
+
+
+        //console.log(hijo.fila)
+        //console.log(hijo.columna)
+        //console.log(raiz.childs[0].childs[0].childs)
+        gg = raiz.childs[0].childs[0].childs[1]
+        //op = new Operacion();
+        res = op.ejecutar(gg)
+        console.log(res)
+        console.log(gg)
+        if (res.tipo == "integer") {
+          simbolo = new Constructor(raiz.childs[0].childs[0].childs[0].value, res.tipo, res.valor, "Variable", "", "")
+          //console.log(hijo)
+          //console.log(hijo.value)
+          Consulta.ObtenerInstancia().insertar(simbolo)
+
+          console.log(raiz.childs[0].childs[0].childs[0].value)
+
+          //lec = hijo.value
+
+          let b = raiz.childs[0].childs[0].childs[0].value;
+
+          num = res.valor
+
+          n = raiz.childs[1].childs[0].childs[0].value + raiz.childs[1].childs[1].value + raiz.childs[1].childs[2].childs[0].value
+          console.log(raiz.childs[1])
+          //console.log(n.valor)
+
+          yy = raiz.childs[2].childs[0].childs[0].value + raiz.childs[2].childs[1].value
+          console.log(raiz.childs[2])
+          //console.log(yy.valor)
+
+          console.log(raiz)
+
+          console.log(b + "=" + num + ";" + n + ";" + yy)
+
+          let r = 0;
+
+          for (raiz.childs[0].childs[0].childs[0].value = res.valor; raiz.childs[1].childs[0].childs[0].value + raiz.childs[1].childs[1].value + raiz.childs[1].childs[2].childs[0].value; raiz.childs[2].childs[0].childs[0].value + raiz.childs[2].childs[1].value) {
+            console.log("funciona muy bien")
+            r = r + 1
+            codigo += this.interpretar(raiz.childs[3].childs[0])
+            res = op.ejecutar(raiz.childs[0])
+
+            simboloT = Consulta.ObtenerInstancia().obtener(b)
+            //op = new Operacion();
+            lec = op.ejecutar(raiz.childs[2])
+            console.log(b)
+            console.log(simboloT)
+            if (simboloT.tipo == lec.tipo) {
+              simboloT.valor = lec.valor;
+              Consulta.ObtenerInstancia().modificar(simboloT)
+              console.log(lec)
+
+            } else {
+              simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+              Func_Error.ObtenerInstancia().insertar(simboloerr)
+              console.log(simboloerr)
+            }
+
+
+            if (r == raiz.childs[1].childs[2].childs[0].value) {
+              break;
+            }
+
+
+          }
+
+        } else {
+          simbolo = new Cons_Error("Sintactico", "No es un valor integer", hijo.fila, hijo.columna)
+          Func_Error.ObtenerInstancia().insertar(simbolo)
+        }
+
+
+        break;
+      case "FOR1":
+        op = new Operacion()
+
+        console.log(raiz)
+        //res = op.ejecutar(raiz.childs[0])
+        console.log(raiz.childs[0].childs)
+
+
+        //console.log(hijo.fila)
+        //console.log(hijo.columna)
+        //console.log(raiz.childs[0].childs[0].childs)
+        gg = raiz.childs[0].childs[1]
+        //op = new Operacion();
+        res = op.ejecutar(gg)
+        console.log(res)
+        console.log(gg)
+        //lec = hijo.value
+
+        let b = raiz.childs[0].childs[0].value;
+
+        num = res.valor
+
+        n = raiz.childs[1].childs[0].childs[0].value + raiz.childs[1].childs[1].value + raiz.childs[1].childs[2].childs[0].value
+        console.log(raiz.childs[1])
+        //console.log(n.valor)
+
+        yy = raiz.childs[2].childs[0].childs[0].value + raiz.childs[2].childs[1].value
+        console.log(raiz.childs[2])
+        //console.log(yy.valor)
+
+        console.log(raiz)
+
+        console.log(b + "=" + num + ";" + n + ";" + yy)
+
+        let r = 0;
+
+        for (raiz.childs[0].childs[0].value = res.valor; raiz.childs[1].childs[0].childs[0].value + raiz.childs[1].childs[1].value + raiz.childs[1].childs[2].childs[0].value; raiz.childs[2].childs[0].childs[0].value + raiz.childs[2].childs[1].value) {
+          console.log("funciona muy bien")
+          r = r + 1
+          codigo += this.interpretar(raiz.childs[3].childs[0])
+          res = op.ejecutar(raiz.childs[0])
+
+          simboloT = Consulta.ObtenerInstancia().obtener(b)
+          //op = new Operacion();
+          lec = op.ejecutar(raiz.childs[2])
+          console.log(b)
+          console.log(simboloT)
+          if (simboloT.tipo == lec.tipo) {
+            simboloT.valor = lec.valor;
+            Consulta.ObtenerInstancia().modificar(simboloT)
+            console.log(lec)
+
+          } else {
+            simboloerr = new Cons_Error("Sintactico", raiz.childs[0].value + " es una variable de tipo " + simbolo.tipo + " y se le esta asignando un valor de tipo  " + res.tipo, simbolo.fila, simbolo.columna)
+            Func_Error.ObtenerInstancia().insertar(simboloerr)
+            console.log(simboloerr)
+          }
+
+
+          if (r == raiz.childs[1].childs[2].childs[0].value) {
+            break;
+          }
+
+
+        }
+
+
+
+        break;
+      case "BREAK":
+        console.log(raiz)
+        console.log("hululu")
+
+        codigo += this.interpretar(raiz.value)
+
+
+
+        return codigo;
+
+      case "CONTINUE":
+        console.log(raiz)
+        console.log("hololo")
+
+        codigo += this.interpretar(raiz.value)
+        return codigo;
+
+      case "RETURN":
+        console.log(raiz)
+        console.log("helele")
+
+        codigo += this.interpretar(raiz.value)
+        return codigo;
+
+      case "RETURN EXP":
+        op = new Operacion()
+        res = op.ejecutar(raiz.childs[0])
+
+        codigo += this.interpretar(raiz.value + " " + res.valor)
+
+        return codigo;
+
+      case "SWITCH":
+        op = new Operacion()
+        res = op.ejecutar(raiz.childs[0])
+
+        console.log(res);
+        console.log("diminuto")
+        console.log(res.valor)
+
+        lec = raiz.childs[1].childs[0].childs[0]
+
+        yy = raiz.childs[1].childs[0].childs.length
+
+        console.log(raiz.childs[1].childs[0].childs)
+
+        if (lec.value == "DEFAULT") {
+          console.log("leon")
+
+          for (let h = 3; h < yy; h = h + 3) {
+
+            simboloT = op.ejecutar(raiz.childs[1].childs[0].childs[h])
+            console.log(simboloT)
+            console.log("ñoño")
+            console.log(simboloT.valor)
+
+
+            switch (res.valor) {
+
+              case simboloT.valor:
+                codigo += this.interpretar(raiz.childs[1].childs[0].childs[1 + h].childs[0])
+                console.log("se pudo")
+                console.log(raiz.childs[1].childs[0].childs[1 + h].childs[0])
+                res = op.ejecutar(raiz.childs[0])
+
+
+              default:
+                codigo += this.interpretar(raiz.childs[1].childs[0].childs[1].childs[0])
+                console.log("no se pudo")
+                console.log(raiz.childs[1].childs[0].childs[1].childs[0])
+                res = op.ejecutar(raiz.childs[0])
+
+            }
+
+          }
+          switch (res.valor) {
+
+            default:
+              codigo += this.interpretar(raiz.childs[1].childs[0].childs[1].childs[0])
+              console.log("que se bva hacer")
+              res = op.ejecutar(raiz.childs[0])
+              console.log(raiz.childs[1].childs[0].childs[1].childs[0])
+
+          }
+
+
+        } else {
+          for (let h = 1; h < yy; h = h + 3) {
+
+            simboloT = op.ejecutar(raiz.childs[1].childs[0].childs[h])
+
+
+            switch (res.valor) {
+
+              case simboloT.valor:
+                codigo += this.interpretar(raiz.childs[1].childs[0].childs[1 + h].childs[0])
+                res = op.ejecutar(raiz.childs[0])
+                console.log(raiz.childs[1].childs[0].childs[1 + h].childs[0])
+
+
+              default:
+                codigo += this.interpretar(raiz.childs[1].childs[0].childs[1].childs[0])
+                res = op.ejecutar(raiz.childs[0])
+                console.log(raiz.childs[1].childs[0].childs[1].childs[0])
+
+
+            }
+
+          }
+
+
+
+
+        }
+
+
+        break;
+
     }
     return codigo;
 

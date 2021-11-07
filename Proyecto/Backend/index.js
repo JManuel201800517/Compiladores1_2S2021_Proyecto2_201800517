@@ -72,7 +72,7 @@ function saveFile(id){
 }
 
 function errTable(){
-  var text=Func_Error.ObtenerInstancia().ObtenerErrorTable();
+  var text=Func_Error.ObtenerInstancia().ObtenerError();
   download(text,"Error.html","text/html");
 
 }
